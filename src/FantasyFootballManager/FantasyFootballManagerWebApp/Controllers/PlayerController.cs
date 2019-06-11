@@ -22,28 +22,32 @@ namespace FantasyFootballManagerWebApp.Controllers
         }
 
         // GET: Player
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_playerRepository.ListAllAsync());
+            var listOfPlayer = await _playerRepository.ListAllAsync();
+            return View(listOfPlayer);
         }
 
         // GET: Player/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View(_playerRepository.GetByIdAsync(id));
+            var playerDetails = await _playerRepository.GetByIdAsync(id);
+            return View(playerDetails);
         }
 
         // GET: Player/Create
         public ActionResult Create()
         {
+
             return View(new Player());
         }
 
         // POST: Player/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Player newPlayer, IFormCollection collection)
+        public async Task<IActionResult> Create(Player newPlayer, IFormCollection collection)
         {
+
             try
             {
                 if (!ModelState.IsValid)
@@ -51,7 +55,7 @@ namespace FantasyFootballManagerWebApp.Controllers
                     return View(newPlayer);
                 }
 
-                _playerRepository.AddAsync(newPlayer);
+                await _playerRepository.AddAsync(newPlayer);
 
 
                 return RedirectToAction(nameof(Index));
@@ -64,15 +68,16 @@ namespace FantasyFootballManagerWebApp.Controllers
         }
 
         // GET: Player/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View(_playerRepository.GetByIdAsync(id));
+            var playerToEdit = await _playerRepository.GetByIdAsync(id);
+            return View(playerToEdit);
         }
 
         // POST: Player/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Player editedPlayer, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, Player editedPlayer, IFormCollection collection)
         {
 
             if (!ModelState.IsValid)
@@ -81,7 +86,7 @@ namespace FantasyFootballManagerWebApp.Controllers
             }
             try
             {
-                _playerRepository.UpdateAsync(editedPlayer);
+                await _playerRepository.UpdateAsync(editedPlayer);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -91,27 +96,29 @@ namespace FantasyFootballManagerWebApp.Controllers
             return View(editedPlayer);
         }
 
-// GET: Player/Delete/5
-public ActionResult Delete(int id)
-{
-    return View(_playerRepository.GetByIdAsync(id));
-}
+        // GET: Player/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var playerToDelete = await _playerRepository.GetByIdAsync(id);
+            return View(playerToDelete);
+        }
 
-// POST: Player/Delete/5
-[HttpPost]
-[ValidateAntiForgeryToken]
-public ActionResult Delete(int id, Player deletedPlayer, IFormCollection collection)
-{
-    try
-    {
-           
-         _playerRepository.DeleteAsync(deletedPlayer);
-        return RedirectToAction(nameof(Index));
-    }
-    catch
-    {
-        return View();
-    }
-}
+        // POST: Player/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, Player deletedPlayer, IFormCollection collection)
+        {
+            try
+            {
+                var playerToDelete = await _playerRepository.GetByIdAsync(id);
+                await _playerRepository.DeleteAsync(playerToDelete);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                var notDeletedPlayer = await _playerRepository.GetByIdAsync(id);
+                return View(notDeletedPlayer);
+            }
+        }
     }
 }
