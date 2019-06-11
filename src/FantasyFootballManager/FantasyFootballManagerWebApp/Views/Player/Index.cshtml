@@ -1,0 +1,59 @@
+﻿@model IEnumerable<StraussDa.FantasyFootballLibrary.Player>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerPos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerTeam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerImangeName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerPos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerTeam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerImangeName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.PlayerId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.PlayerId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.PlayerId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

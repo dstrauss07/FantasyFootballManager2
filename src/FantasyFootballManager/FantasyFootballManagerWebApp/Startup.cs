@@ -14,6 +14,8 @@ using FantasyFootballManagerWebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StraussDa.FantasyFootballLibrary;
+using StraussDa.FantasyFootballLibrary.Infrastructure;
+using StraussDa.FantasyFootballLibrary.Interfaces;
 
 namespace FantasyFootballManagerWebApp
 {
@@ -45,7 +47,7 @@ namespace FantasyFootballManagerWebApp
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

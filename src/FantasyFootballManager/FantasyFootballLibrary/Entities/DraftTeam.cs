@@ -18,3 +18,4 @@ namespace StraussDa.FantasyFootballLibrary
         public TestUserProfile TestUserProfie { get; set; }
     }
 }
+

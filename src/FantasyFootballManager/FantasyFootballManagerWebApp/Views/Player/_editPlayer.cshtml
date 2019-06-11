@@ -1,0 +1,29 @@
+﻿@model StraussDa.FantasyFootballLibrary.Player
+
+<form asp-action="@ViewData["Action"]">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input hidden asp-for="PlayerId" />
+    <div class="form-group">
+        <label asp-for="PlayerName" class="control-label"></label>
+        <input asp-for="PlayerName" class="form-control" />
+        <span asp-validation-for="PlayerName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayerPos" class="control-label"></label>
+        <input asp-for="PlayerPos" class="form-control" />
+        <span asp-validation-for="PlayerPos" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayerTeam" class="control-label"></label>
+        <input asp-for="PlayerTeam" class="form-control" />
+        <span asp-validation-for="PlayerTeam" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayerImangeName" class="control-label"></label>
+        <input asp-for="PlayerImangeName" class="form-control" />
+        <span asp-validation-for="PlayerImangeName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="@ViewData["Action"]" class="btn btn-primary" />
+    </div>
+</form>
