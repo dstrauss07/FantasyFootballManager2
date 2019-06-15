@@ -24,9 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.PlayerTeam)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlayerImangeName)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -44,9 +41,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PlayerTeam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlayerImangeName)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.PlayerId }) |

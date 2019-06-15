@@ -1,0 +1,41 @@
+﻿@model IEnumerable<StraussDa.FantasyFootballLibrary.TestUserProfile>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TestUserProfileId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TestUserProfileId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserEmail)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id=item.TestUserProfileId }) |
+                @Html.ActionLink("Details", "Details", new {id=item.TestUserProfileId  }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.TestUserProfileId})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

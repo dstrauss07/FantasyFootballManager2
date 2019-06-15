@@ -10,6 +10,5 @@ namespace StraussDa.FantasyFootballLibrary
         public string PlayerName { get; set; }
         public string PlayerPos { get; set; }
         public string PlayerTeam { get; set; }
-        public string PlayerImangeName { get; set; }
     }
 }

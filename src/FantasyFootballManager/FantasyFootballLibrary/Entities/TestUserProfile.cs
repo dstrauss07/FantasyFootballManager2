@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StraussDa.FantasyFootballLibrary
 {
-    public class TestUserProfile
+    public class TestUserProfile:BaseEntity
     {
         public int TestUserProfileId { get; set; }
         public string Name { get; set; }

@@ -1,0 +1,21 @@
+﻿@model StraussDa.FantasyFootballLibrary.TestUserProfile
+
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    ViewData["Action"] = "Edit";
+}
+
+
+<h4>TestUserProfile</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @Html.Partial("_editProfile", Model, ViewData)
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
