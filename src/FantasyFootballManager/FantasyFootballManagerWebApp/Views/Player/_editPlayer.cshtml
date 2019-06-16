@@ -10,12 +10,52 @@
     </div>
     <div class="form-group">
         <label asp-for="PlayerPos" class="control-label"></label>
-        <input asp-for="PlayerPos" class="form-control" />
+        <select asp-for="PlayerPos" class="form-control">
+        <option>QB</option>
+        <option>RB</option>
+        <option>WR</option>
+        <option>TE</option>
+        <option>DST</option>
+        <option>K</option>
+        </select>
         <span asp-validation-for="PlayerPos" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="PlayerTeam" class="control-label"></label>
-        <input asp-for="PlayerTeam" class="form-control" />
+        <select asp-for="PlayerTeam" class="form-control">
+            <option>ARI</option>
+            <option>ATL</option>
+            <option>BAL</option>
+            <option>CAR</option>
+            <option>CHI</option>
+            <option>CIN</option>
+            <option>CLE</option>
+            <option>DAL</option>
+            <option>DEN</option>
+            <option>DET</option>
+            <option>GBP</option>
+            <option>HOU</option>
+            <option>IND</option>
+            <option>JAC</option>
+            <option>KCC</option>
+            <option>LAC</option>
+            <option>LAR</option>
+            <option>MIA</option>
+            <option>MIN</option>
+            <option>NWE</option>
+            <option>NOS</option>
+            <option>NYG</option>
+            <option>NYJ</option>
+            <option>OAK</option>
+            <option>PHI</option>
+            <option>PIT</option>
+            <option>SFO</option>
+            <option>SEA</option>
+            <option>TBB</option>
+            <option>TEN</option>
+            <option>WAS</option>
+          </select>
+
         <span asp-validation-for="PlayerTeam" class="text-danger"></span>
     </div>
     <div class="form-group">

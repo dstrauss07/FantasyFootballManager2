@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StraussDa.FantasyFootballLibrary.Interfaces;
 using StraussDa.FantasyFootballLibrary;
-using StraussDa.FantasyFootballLibrary.Infrastructure;
+
 
 
 namespace FantasyFootballManagerWebApp.Controllers

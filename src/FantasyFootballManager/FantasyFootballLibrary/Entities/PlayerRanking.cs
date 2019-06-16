@@ -4,10 +4,10 @@ using System.Text;
 
 namespace StraussDa.FantasyFootballLibrary
 {
-    public class PlayerRanking
+    public class PlayerRanking: BaseEntity
     {
         public int PlayerRankingId { get; set; }
-        public bool IsCustom { get; set; }
+        public bool IsDefault { get; set; }
         public int PlayerRank { get; set; }
         public int PosRank { get; set; }
         public decimal PlayerValue { get; set; }

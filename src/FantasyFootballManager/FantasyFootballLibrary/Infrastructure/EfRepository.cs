@@ -10,7 +10,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        private readonly PlayerDbContext _dbContext;
+        protected readonly PlayerDbContext _dbContext;
 
         public EfRepository(PlayerDbContext playerDbContext)
         {

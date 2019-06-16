@@ -15,7 +15,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserEmail)
             </th>
-            <th></th>
+            <th> @Html.DisplayNameFor(model => model.DraftedTeams)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -31,9 +32,12 @@
                 @Html.DisplayFor(modelItem => item.UserEmail)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id=item.TestUserProfileId }) |
-                @Html.ActionLink("Details", "Details", new {id=item.TestUserProfileId  }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.TestUserProfileId})
+                @Html.DisplayFor(modelItem => item.DraftedTeams.Count)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TestUserProfileId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TestUserProfileId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.TestUserProfileId })
             </td>
         </tr>
 }
