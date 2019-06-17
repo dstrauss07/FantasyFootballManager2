@@ -16,8 +16,16 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         }
         public virtual async Task<PlayerRanking> GetByPlayerIdAsync(int id)
         {
-             var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerId == id);
-            return PlayerRankToReturn;
+            try
+            {
+                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerId == id);
+                Console.WriteLine("hello nurse");
+                return PlayerRankToReturn;
+            }
+            catch
+            {
+                return null;
+            }
     }
     }
 }

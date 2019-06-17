@@ -49,6 +49,7 @@ namespace FantasyFootballManagerWebApp
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IRankingRepository, RankingRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

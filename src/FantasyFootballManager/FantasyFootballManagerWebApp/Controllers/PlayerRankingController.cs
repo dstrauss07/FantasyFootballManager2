@@ -12,10 +12,10 @@ namespace FantasyFootballManagerWebApp.Controllers
 {
     public class PlayerRankingController : Controller
     {
-        private readonly IAsyncRepository<Player> _playerRepository;
+        private readonly IPlayerRepository _playerRepository;
         private readonly IRankingRepository _rankingRepository;
 
-        public PlayerRankingController(IAsyncRepository<Player> playerRepository, IRankingRepository rankingRepository)
+        public PlayerRankingController(IPlayerRepository playerRepository, IRankingRepository rankingRepository)
         {
             _playerRepository = playerRepository;
             _rankingRepository = rankingRepository;
@@ -63,24 +63,30 @@ namespace FantasyFootballManagerWebApp.Controllers
         // GET: PlayerRanking/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new PlayerRanking());
         }
 
         // POST: PlayerRanking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(PlayerRanking newPlayerRanking, IFormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(newPlayerRanking);
+                }
+
+                await _rankingRepository.AddAsync(newPlayerRanking);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
             }
+            return View(newPlayerRanking);
         }
 
         // GET: PlayerRanking/Edit/5

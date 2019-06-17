@@ -19,7 +19,14 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            try
+            {
+                return await _dbContext.Set<T>().FindAsync(id);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
@@ -29,10 +36,18 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public async Task<T> AddAsync(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                 _dbContext.Set<T>().Add(entity);
+                await _dbContext.SaveChangesAsync();
 
-            return entity;
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return entity;
+            }
         }
 
         public async Task UpdateAsync(T entity)

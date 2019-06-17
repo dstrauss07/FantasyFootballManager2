@@ -1,0 +1,79 @@
+﻿@model StraussDa.FantasyFootballLibrary.PlayerRanking
+
+<h4>PlayerRanking</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PlayerRankingId" class="control-label"></label>
+                <input asp-for="PlayerRankingId" class="form-control" />
+                <span asp-validation-for="PlayerRankingId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlayerRank" class="control-label"></label>
+                <input asp-for="PlayerRank" class="form-control" />
+                <span asp-validation-for="PlayerRank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosRank" class="control-label"></label>
+                <input asp-for="PosRank" class="form-control" />
+                <span asp-validation-for="PosRank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlayerValue" class="control-label"></label>
+                <input asp-for="PlayerValue" class="form-control" />
+                <span asp-validation-for="PlayerValue" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="PprRank" class="control-label"></label>
+                <input asp-for="PprRank" class="form-control" />
+                <span asp-validation-for="PprRank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PprPosRank" class="control-label"></label>
+                <input asp-for="PprPosRank" class="form-control" />
+                <span asp-validation-for="PprPosRank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PprValue" class="control-label"></label>
+                <input asp-for="PprValue" class="form-control" />
+                <span asp-validation-for="PprValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SflexRank" class="control-label"></label>
+                <input asp-for="SflexRank" class="form-control" />
+                <span asp-validation-for="SflexRank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SflexValue" class="control-label"></label>
+                <input asp-for="SflexValue" class="form-control" />
+                <span asp-validation-for="SflexValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlayerRiskLevel" class="control-label"></label>
+                <input asp-for="PlayerRiskLevel" class="form-control" />
+                <span asp-validation-for="PlayerRiskLevel" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="PlayerId" class="control-label"></label>
+                <input asp-for="PlayerId" class="form-control" />
+                <span asp-validation-for="PlayerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TestUserProfileId" class="control-label"></label>
+                <input asp-for="TestUserProfileId" class="form-control" />
+                <span asp-validation-for="TestUserProfileId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
