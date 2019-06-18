@@ -60,7 +60,8 @@ namespace FantasyFootballManagerWebApp.Controllers
                 }
 
                 await _playerRepository.AddAsync(newPlayer);
-                await AddPlayerRankingMethod.AddPlayerRanking(newPlayer, _playerRepository, _rankingRepository);
+                var returnedPlayer = await _playerRepository.GetByPlayerByName(newPlayer.PlayerName);
+                await AddPlayerRankingMethod.AddPlayerRanking(returnedPlayer, _rankingRepository, _playerRepository);
 
                 return RedirectToAction(nameof(Index));
             }

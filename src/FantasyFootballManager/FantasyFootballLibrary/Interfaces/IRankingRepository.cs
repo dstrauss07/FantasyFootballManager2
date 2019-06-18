@@ -8,5 +8,6 @@ namespace StraussDa.FantasyFootballLibrary.Interfaces
     public interface IRankingRepository : IAsyncRepository<PlayerRanking>
     {
         Task <PlayerRanking> GetByPlayerIdAsync(int id);
+        Task<PlayerRanking> FindPreviousPlayer(PlayerRanking playerRanking);
     }
 }

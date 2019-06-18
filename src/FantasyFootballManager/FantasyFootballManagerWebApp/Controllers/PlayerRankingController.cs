@@ -54,85 +54,40 @@ namespace FantasyFootballManagerWebApp.Controllers
             return View(playerRankingModelList);
         }
 
-        // GET: PlayerRanking/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: PlayerRanking/Create
-        public ActionResult Create()
-        {
-            return View(new PlayerRanking());
-        }
-
-        // POST: PlayerRanking/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PlayerRanking newPlayerRanking, IFormCollection collection)
+        public async Task<IActionResult> MoveUp(PlayerRanking playerRanking)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(newPlayerRanking);
-                }
 
-                await _rankingRepository.AddAsync(newPlayerRanking);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return View(newPlayerRanking);
-        }
-
-        // GET: PlayerRanking/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: PlayerRanking/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
+                PlayerRanking playerMovingDown = await _rankingRepository.FindPreviousPlayer(playerRanking);
+                await _rankingRepository.UpdateAsync(playerMovingDown);
+                PlayerRanking playerMovingUp = playerRanking;
+                playerMovingUp.PlayerRank -= 1;
+                await _rankingRepository.UpdateAsync(playerMovingUp);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                //todo log exception
             }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: PlayerRanking/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: PlayerRanking/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// GET: PlayerRanking/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
+
+        //// GET: PlayerRanking/Create
+        //public ActionResult Create()
+        //{
+        //    return View(new PlayerRanking());
+        //}
+
+
     }
 }

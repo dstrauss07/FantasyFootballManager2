@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<FantasyFootballManagerWebApp.Models.PlayerRankingModel>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -11,9 +8,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.playerToRank.PlayerPos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerToRank.PlayerTeam)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.playerRanking.PlayerRank)
@@ -43,54 +37,49 @@
                 @Html.DisplayNameFor(model => model.playerRanking.PlayerRiskLevel)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PlayerRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PosRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PlayerValue)
-                </td>
-                <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.PprRank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.PprPosRank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.PprValue)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.SflexRank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.SflexValue)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerRanking.PlayerRiskLevel)
-                    </td>
-                <td>
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.playerRanking.PlayerRankingId })*@
-                    @*@Html.ActionLink("Details", "Details", new { id = item.playerRanking.PlayerRankingId })*@
-                    @*@Html.ActionLink("Delete", "Delete", new { id = item.playerRanking.PlayerRankingId })*@
-                </td>
-            </tr>
+        <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PlayerRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PosRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PlayerValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PprRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PprPosRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PprValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.SflexRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.SflexValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.PlayerRiskLevel)
+            </td>
+            <td>@Html.ActionLink("Up", "MoveUp", new { id = item.playerRanking.PlayerRankingId })</td>
+            <td>@Html.ActionLink("Down", "MoveDown", new { id = item.playerRanking.PlayerRankingId })</td>
+        </tr>
         }
     </tbody>
 </table>

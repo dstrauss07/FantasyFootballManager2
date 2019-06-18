@@ -10,7 +10,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
     public class RankingRepository : EfRepository<PlayerRanking>, IRankingRepository
     {
-        public RankingRepository(PlayerDbContext playerDbContext): base(playerDbContext)
+        public RankingRepository(PlayerDbContext playerDbContext) : base(playerDbContext)
         {
 
         }
@@ -19,13 +19,32 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             try
             {
                 var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerId == id);
-                Console.WriteLine("hello nurse");
                 return PlayerRankToReturn;
             }
             catch
             {
                 return null;
             }
-    }
+        }
+        public virtual async Task<PlayerRanking> GetByPlayerRankAsync(int rank)
+        {
+            try
+            {
+                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerRank == rank);
+                return PlayerRankToReturn;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<PlayerRanking> FindPreviousPlayer(PlayerRanking playerRanking)
+        {
+            PlayerRanking playerRankToUpdate = await GetByPlayerRankAsync(playerRanking.PlayerRank - 1);
+            playerRankToUpdate.PlayerRank += 1;
+            return playerRankToUpdate;
+
+        }
     }
 }
