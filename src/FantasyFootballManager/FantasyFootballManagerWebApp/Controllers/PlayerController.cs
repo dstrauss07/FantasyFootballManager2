@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using StraussDa.FantasyFootballLibrary.Interfaces;
 using StraussDa.FantasyFootballLibrary;
 using MoreLinq;
+using FantasyFootballManagerWebApp.Methods;
 
 
 
@@ -59,7 +60,7 @@ namespace FantasyFootballManagerWebApp.Controllers
                 }
 
                 await _playerRepository.AddAsync(newPlayer);
-                await AddPlayerRanking(newPlayer);
+                await AddPlayerRankingMethod.AddPlayerRanking(newPlayer, _playerRepository, _rankingRepository);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -71,32 +72,33 @@ namespace FantasyFootballManagerWebApp.Controllers
             return View(newPlayer);
         }
 
-        private async Task AddPlayerRanking(Player newPlayer)
-        {
-            var returnedPlayer = await _playerRepository.GetByPlayerByName(newPlayer.PlayerName);
-            if (await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId) != null)
-            {
-                PlayerRanking playerRankingToDelete = await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId);
-                await _rankingRepository.DeleteAsync(playerRankingToDelete);
-                Console.Write("Previous Ranking Deleted");
-            }
+        //private async Task AddPlayerRanking(Player newPlayer)
+        //{
+        //    var returnedPlayer = await _playerRepository.GetByPlayerByName(newPlayer.PlayerName);
+        //    if (await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId) != null)
+        //    {
+        //        PlayerRanking playerRankingToDelete = await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId);
+        //        await _rankingRepository.DeleteAsync(playerRankingToDelete);
+        //        Console.Write("Previous Ranking Deleted");
+        //    }
 
-            PlayerRanking playerRankingToAdd = new PlayerRanking();
-            playerRankingToAdd.PlayerId = returnedPlayer.PlayerId;
-            IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
-            if (allPlayerRanks.Count() > 0)
-            {
-                var highestRankedPlayer = allPlayerRanks.Max(x => x.PlayerRank);
-                playerRankingToAdd.PlayerRank = highestRankedPlayer + 1;
-            }
-            else
-            {
-                playerRankingToAdd.PlayerRank = 1;
-            }
+        //    PlayerRanking playerRankingToAdd = new PlayerRanking();
+        //    playerRankingToAdd.PlayerId = returnedPlayer.PlayerId;
+        //    IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
+        //    if (allPlayerRanks.Count() > 0)
+        //    {
+        //        var highestRankedPlayer = allPlayerRanks.Max(x => x.PlayerRank);
+        //        playerRankingToAdd.PlayerRank = highestRankedPlayer + 1;
+        //    }
+        //    else
+        //    {
+        //        playerRankingToAdd.PlayerRank = 1;
+        //    }
 
-            playerRankingToAdd.TestUserProfileId = 2;
-            await _rankingRepository.AddAsync(playerRankingToAdd);
-        }
+        //    playerRankingToAdd.TestUserProfileId = 2;
+        //    playerRankingToAdd.isDefault = true;
+        //    await _rankingRepository.AddAsync(playerRankingToAdd);
+        //}
 
         // GET: Player/Edit/5
         public async Task<IActionResult> Edit(int id)
