@@ -39,12 +39,11 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             }
         }
 
-        public async Task<PlayerRanking> FindPreviousPlayer(PlayerRanking playerRanking)
+        public async Task<PlayerRanking> ChangeOtherPlayerRank(PlayerRanking playerRanking, int i)
         {
-            PlayerRanking playerRankToUpdate = await GetByPlayerRankAsync(playerRanking.PlayerRank - 1);
-            playerRankToUpdate.PlayerRank += 1;
+            PlayerRanking playerRankToUpdate = await GetByPlayerRankAsync(playerRanking.PlayerRank - i);
+            playerRankToUpdate.PlayerRank += i;
             return playerRankToUpdate;
-
         }
     }
 }

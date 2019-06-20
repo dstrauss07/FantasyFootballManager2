@@ -1,0 +1,91 @@
+﻿@model IEnumerable<FantasyFootballManagerWebApp.Models.PlayerRankingModel>
+
+@{
+    int itemNum = 0;
+    int lastItem = Model.Count() - 1;
+}
+<h3>All Players Sflex Ranks</h3>
+
+<p>
+    <a asp-action="Index">Standard</a>
+    <a asp-action="Ppr">Ppr</a>
+    <a asp-action="Sflex">Sflex</a>
+</p>
+<p>
+    <a asp-action="All-Standard">All</a>
+    <a asp-action="RB-Standard">RB</a>
+    <a asp-action="WR-Standard">WR</a>
+    <a asp-action="TE-Standard">TE</a>
+    <a asp-action="DST-Standard">DST</a>
+    <a asp-action="K-Standard">K</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.playerToRank.PlayerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.playerRanking.SflexRank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.playerRanking.PprPosRank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.playerRanking.SflexValue)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.SflexRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
+                @Html.DisplayFor(modelItem => item.playerRanking.PprPosRank)
+            </td>
+
+                        <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.SflexValue)
+            </td>
+
+            @if (itemNum == 0 && itemNum == lastItem)
+            {
+                <td></td>
+                <td></td>
+            }
+            @if (itemNum == 0 && itemNum < lastItem)
+            {
+                <td></td>
+                <td>@Html.ActionLink("Down", "MoveDown", new { id = item.playerRanking.PlayerRankingId, scoring = "sflex" })</td>
+            }
+            @if (itemNum > 0 && itemNum < lastItem)
+            {
+                <td>@Html.ActionLink("Up", "MoveUp", new { id = item.playerRanking.PlayerRankingId, scoring = "sflex" })</td>
+                <td>@Html.ActionLink("Down", "MoveDown", new { id = item.playerRanking.PlayerRankingId, scoring = "sflex" })</td>
+            }
+            @if (itemNum > 0 && itemNum == lastItem)
+            {
+                <td>@Html.ActionLink("Up", "MoveUp", new { id = item.playerRanking.PlayerRankingId, scoring = "sflex" })</td>
+                <td></td>
+            }
+
+            @{
+                itemNum++;
+            }
+
+
+        </tr>
+        }
+    </tbody>
+</table>
