@@ -77,19 +77,31 @@ namespace FantasyFootballManagerWebApp.Controllers
         public async Task<IActionResult> MoveUp(int id, string scoring)
         {
             int direction = 1;
-            string rankType;
             try
             {
+                PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
                 if (scoring == "standard")
                 {
-                    rankType = "PlayerRank";
-
+                    if (playerRankingToChange.PlayerRank > 1)
+                    {
+                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+                    }
+            
                 }
-                PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
-                var rankTypeToCheck = playerRankingToChange.GetType().GetProperty(rankType);
-                if (playerRankingToChange.GetValue(rankType) > 1)
+                if (scoring =="ppr")
                 {
-                    await ChangeStandardPlayerRanks(direction, playerRankingToChange);
+                    if (playerRankingToChange.PprRank > 1)
+                    {
+                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+                    }
+                }
+
+                if (scoring == "sflex")
+                {
+                    if (playerRankingToChange.SflexRank > 1)
+                    {
+                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -124,9 +136,9 @@ namespace FantasyFootballManagerWebApp.Controllers
         }
 
 
-        private async Task ChangeStandardPlayerRanks(int direction, PlayerRanking playerRankingToChange)
+        private async Task ChangePlayerRanks(int direction, PlayerRanking playerRankingToChange, String scoring)
         {
-            PlayerRanking otherPlayerRankMoving = await _rankingRepository.ChangeOtherPlayerRank(playerRankingToChange, direction);
+            PlayerRanking otherPlayerRankMoving = await _rankingRepository.ChangeOtherPlayerRank(playerRankingToChange, direction, scoring);
             playerRankingToChange.PlayerRank -= direction;
             Player playerToChange = await _playerRepository.GetByIdAsync(playerRankingToChange.PlayerId);
             Player otherPlayer = await _playerRepository.GetByIdAsync(otherPlayerRankMoving.PlayerId);
