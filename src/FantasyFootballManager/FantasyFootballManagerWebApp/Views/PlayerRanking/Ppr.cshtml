@@ -73,16 +73,16 @@
                 @if (itemNum == 0 && itemNum < lastItem)
                 {
                     <td></td>
-                    <td>@Html.ActionLink("Down", "MoveDown", new { id = item.playerRanking.PlayerRankingId, scoring = "ppr"  })</td>
+                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = -1 })</td>
                 }
                 @if (itemNum > 0 && itemNum < lastItem)
                 {
-                    <td>@Html.ActionLink("Up", "MoveUp", new { id = item.playerRanking.PlayerRankingId, scoring = "ppr"  })</td>
-                    <td>@Html.ActionLink("Down", "MoveDown", new { id = item.playerRanking.PlayerRankingId, scoring = "ppr"  })</td>
+                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = 1 })</td>
+                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = -1 })</td>
                 }
                 @if (itemNum > 0 && itemNum == lastItem)
                 {
-                    <td>@Html.ActionLink("Up", "MoveUp", new { id = item.playerRanking.PlayerRankingId, scoring = "ppr" })</td>
+                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = 1 })</td>
                     <td></td>
                 }
 

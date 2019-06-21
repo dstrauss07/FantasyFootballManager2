@@ -26,7 +26,7 @@ namespace FantasyFootballManagerWebApp.Controllers
 
 
         // GET: PlayerRanking
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Standard()
         {
             List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
             return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
@@ -74,82 +74,85 @@ namespace FantasyFootballManagerWebApp.Controllers
             return playerRankingModelList;
         }
 
-        public async Task<IActionResult> MoveUp(int id, string scoring)
+        public async Task<IActionResult> MovePlayers(int id, string scoring, int direction)
         {
-            int direction = 1;
             try
             {
                 PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
-                if (scoring == "standard")
+                List<PlayerRanking> playerRankingList = await _rankingRepository.SwapPlayerRanks(playerRankingToChange, direction, scoring);
+                Player playerToChange = await _playerRepository.GetByIdAsync(playerRankingList[0].PlayerId);
+                Player otherPlayer = await _playerRepository.GetByIdAsync(playerRankingList[1].PlayerId);
+                if(playerToChange.PlayerPos == otherPlayer.PlayerPos)
                 {
-                    if (playerRankingToChange.PlayerRank > 1)
-                    {
-                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-                    }
-            
+                    await UpdatePosRanks(playerRankingList, scoring, direction);
                 }
-                if (scoring =="ppr")
-                {
-                    if (playerRankingToChange.PprRank > 1)
-                    {
-                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-                    }
-                }
-
-                if (scoring == "sflex")
-                {
-                    if (playerRankingToChange.SflexRank > 1)
-                    {
-                        await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                       return RedirectToAction(scoring);
+   
             }
             catch
             {
                 //todo log exception
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(scoring);
         }
 
 
-
-        public async Task<IActionResult> MoveDown(int id, string scoring)
+        private async Task UpdatePosRanks(List<PlayerRanking> PlayerRankingList, String scoring, int direction)
         {
-            int direction = -1;
-            try
-            {
-                PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
-                IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
-                int maxPlayerRank = allPlayerRanks.Max(x => x.PlayerRank);
-                if (playerRankingToChange.PlayerRank < maxPlayerRank)
+
+                if (scoring == "Standard")
                 {
-                    await ChangeStandardPlayerRanks(direction, playerRankingToChange);
+                    PlayerRankingList[0].PosRank -= direction;
+                    PlayerRankingList[1].PosRank += direction;
                 }
-                return RedirectToAction(nameof(Index));
+                if (scoring == "Ppr" || scoring == "Sflex")
+                {
+                    PlayerRankingList[0].PprPosRank -= direction;
+                    PlayerRankingList[1].PprPosRank += direction;
+                }
+
+                await _rankingRepository.UpdateAsync(PlayerRankingList[0]);
+                await _rankingRepository.UpdateAsync(PlayerRankingList[1]);
             }
-            catch
-            {
-                //todo log exception
-            }
-            return RedirectToAction(nameof(Index));
         }
 
+        //public async Task<IActionResult> MoveDown(int id, string scoring)
+        //{
+        //    int direction = -1;
+        //    try
+        //    {
+        //        PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
+        //        IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
+        //        int maxPlayerRank = allPlayerRanks.Max(x => x.PlayerRank);
+        //        int maxPprRank = allPlayerRanks.Max(x => x.PprRank);
+        //        int maxSflexRank = allPlayerRanks.Max(x => x.SflexRank);
 
-        private async Task ChangePlayerRanks(int direction, PlayerRanking playerRankingToChange, String scoring)
-        {
-            PlayerRanking otherPlayerRankMoving = await _rankingRepository.ChangeOtherPlayerRank(playerRankingToChange, direction, scoring);
-            playerRankingToChange.PlayerRank -= direction;
-            Player playerToChange = await _playerRepository.GetByIdAsync(playerRankingToChange.PlayerId);
-            Player otherPlayer = await _playerRepository.GetByIdAsync(otherPlayerRankMoving.PlayerId);
-            if (playerToChange.PlayerPos == otherPlayer.PlayerPos)
-            {
-                playerRankingToChange.PosRank -= direction;
-                otherPlayerRankMoving.PosRank += direction;
-            }
-            await _rankingRepository.UpdateAsync(otherPlayerRankMoving);
-            await _rankingRepository.UpdateAsync(playerRankingToChange);
-        }
+
+        //        if (playerRankingToChange.PlayerRank < maxPlayerRank && scoring == "standard")
+        //        {
+        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        if (playerRankingToChange.PprRank < maxPprRank && scoring == "ppr")
+        //        {
+        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+        //            return RedirectToAction(nameof(Ppr));
+        //        }
+        //        if (playerRankingToChange.SflexRank < maxSflexRank && scoring == "sflex")
+        //        {
+        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
+        //            return RedirectToAction(nameof(Sflex));
+        //        }
+
+        //    }
+        //    catch
+        //    {
+        //        //todo log exception
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
 
 
 
@@ -167,4 +170,3 @@ namespace FantasyFootballManagerWebApp.Controllers
 
 
     }
-}
