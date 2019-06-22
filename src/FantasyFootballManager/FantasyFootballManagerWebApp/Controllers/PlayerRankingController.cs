@@ -22,62 +22,58 @@ namespace FantasyFootballManagerWebApp.Controllers
             _rankingRepository = rankingRepository;
         }
 
-
-
-
-        // GET: PlayerRanking
-        //public async Task<IActionResult> Standard()
-        //{
-        //    List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
-        //    return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
-        //}
         public async Task<IActionResult> Standard(string playerPosition)
         {
-            if(playerPosition != null)
+            PlayerRankingViewModel playerRankingViewBag = new PlayerRankingViewModel();
+            ViewBag.scoringType = "Standard";
+            if (playerPosition != null)
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                ViewBag.playerPosition = playerPosition;
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
             }
             else
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                ViewBag.playerPosition = "All Players";
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
             }
         }
 
         public async Task<IActionResult> Ppr(string playerPosition)
         {
+            ViewBag.scoringType = "Ppr";
             if (playerPosition != null)
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                ViewBag.playerPosition = playerPosition;
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
             }
             else
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                ViewBag.playerPosition = "All Players";
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
             }
         }
 
         public async Task<IActionResult> Dynasty(string playerPosition)
         {
+            ViewBag.scoringType = "Dynasty";
             if (playerPosition != null)
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                ViewBag.playerPosition = playerPosition;
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
             }
             else
             {
                 List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                ViewBag.playerPosition = "All Players";
                 return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
             }
         }
 
-        public async Task<IActionResult> FilterPlayers()
-        {
-            List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
-            return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
-        }
 
         private async Task<List<PlayerRankingModel>> CreatePlayerViewModel()
         {

@@ -1,25 +1,12 @@
 ﻿@model IEnumerable<FantasyFootballManagerWebApp.Models.PlayerRankingModel>
-
 @{
     int itemNum = 0;
     int lastItem = Model.Count() - 1;
+    string scoringType = @ViewBag.scoringType;
+    string playerPosition = @ViewBag.playerPosition;
 }
-<h3>All Players Standard Ranks</h3>
 
-<p>
-    <a asp-action="Standard">Standard</a>
-    <a asp-action="Ppr">Ppr</a>
-    <a asp-action="Dynasty">Dynasty</a>
-</p>
-<p>
-    <a asp-action="Standard">All</a>
-    @Html.ActionLink("QB", "Standard", new { playerPosition = "QB" })
-    @Html.ActionLink("RB", "Standard", new { playerPosition = "RB" })
-    @Html.ActionLink("WR", "Standard", new { playerPosition = "WR" })
-    @Html.ActionLink("TE", "Standard", new { playerPosition = "TE" })
-    @Html.ActionLink("DST", "Standard", new { playerPosition = "DST" })
-    @Html.ActionLink("K", "Standard", new { playerPosition = "K" })
-</p>
+@Html.Partial("_RankingViewHeader", Model, ViewData)
 
 <table class="table">
     <thead>

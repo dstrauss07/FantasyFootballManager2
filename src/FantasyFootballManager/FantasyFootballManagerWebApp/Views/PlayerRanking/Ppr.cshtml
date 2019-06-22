@@ -3,23 +3,10 @@
 @{
     int itemNum = 0;
     int lastItem = Model.Count() - 1;
+    string scoringType = @ViewBag.scoringType;
+    string playerPosition = @ViewBag.playerPosition;
 }
-<h3>All Players Ppr Ranks</h3>
-
-<p>
-    <a asp-action="Standard">Standard</a>
-    <a asp-action="Ppr">Ppr</a>
-    <a asp-action="Dynasty">Dynasty</a>
-</p>
-<p>
-    <a asp-action="Ppr">All</a>
-    @Html.ActionLink("QB", "Ppr", new { playerPosition = "QB" })
-    @Html.ActionLink("RB", "Ppr", new { playerPosition = "RB" })
-    @Html.ActionLink("WR", "Ppr", new { playerPosition = "WR" })
-    @Html.ActionLink("TE", "Ppr", new { playerPosition = "TE" })
-    @Html.ActionLink("DST", "Ppr", new { playerPosition = "DST" })
-    @Html.ActionLink("K", "Ppr", new { playerPosition = "K" })
-</p>
+@Html.Partial("_RankingViewHeader", Model, ViewData)
 
 <table class="table">
     <thead>
@@ -61,16 +48,16 @@
                 @if (itemNum == 0 && itemNum < lastItem)
                 {
                     <td></td>
-                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = -1 })</td>
+                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, direction = -1 })</td>
                 }
                 @if (itemNum > 0 && itemNum < lastItem)
                 {
-                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = 1 })</td>
-                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = -1 })</td>
+                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, direction = 1 })</td>
+                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, direction = -1 })</td>
                 }
                 @if (itemNum > 0 && itemNum == lastItem)
                 {
-                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Ppr", direction = 1 })</td>
+                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, direction = 1 })</td>
                     <td></td>
                 }
 
