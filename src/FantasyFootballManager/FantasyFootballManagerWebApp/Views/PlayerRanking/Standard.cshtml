@@ -12,12 +12,13 @@
     <a asp-action="Dynasty">Dynasty</a>
 </p>
 <p>
-    <a asp-action="All-Standard">All</a>
-    <a asp-action="RB-Standard">RB</a>
-    <a asp-action="WR-Standard">WR</a>
-    <a asp-action="TE-Standard">TE</a>
-    <a asp-action="DST-Standard">DST</a>
-    <a asp-action="K-Standard">K</a>
+    <a asp-action="Standard">All</a>
+    @Html.ActionLink("QB", "Standard", new { playerPosition = "QB" })
+    @Html.ActionLink("RB", "Standard", new { playerPosition = "RB" })
+    @Html.ActionLink("WR", "Standard", new { playerPosition = "WR" })
+    @Html.ActionLink("TE", "Standard", new { playerPosition = "TE" })
+    @Html.ActionLink("DST", "Standard", new { playerPosition = "DST" })
+    @Html.ActionLink("K", "Standard", new { playerPosition = "K" })
 </p>
 
 <table class="table">

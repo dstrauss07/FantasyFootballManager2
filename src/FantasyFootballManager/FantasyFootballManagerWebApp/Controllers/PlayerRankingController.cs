@@ -26,24 +26,58 @@ namespace FantasyFootballManagerWebApp.Controllers
 
 
         // GET: PlayerRanking
-        public async Task<IActionResult> Standard()
+        //public async Task<IActionResult> Standard()
+        //{
+        //    List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+        //    return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
+        //}
+        public async Task<IActionResult> Standard(string playerPosition)
         {
-            List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
-            return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
+            if(playerPosition != null)
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
+            }
+            else
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
+            }
         }
 
-        public async Task<IActionResult> Ppr()
+        public async Task<IActionResult> Ppr(string playerPosition)
         {
-            List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
-            return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
+            if (playerPosition != null)
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
+            }
+            else
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
+            }
         }
 
-        public async Task<IActionResult> Dynasty()
+        public async Task<IActionResult> Dynasty(string playerPosition)
+        {
+            if (playerPosition != null)
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel(playerPosition);
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
+            }
+            else
+            {
+                List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
+                return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
+            }
+        }
+
+        public async Task<IActionResult> FilterPlayers()
         {
             List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
             return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
         }
-
 
         private async Task<List<PlayerRankingModel>> CreatePlayerViewModel()
         {
@@ -70,6 +104,38 @@ namespace FantasyFootballManagerWebApp.Controllers
                     playerRankingModelList.Add(playerRankingModelToAdd);
                 }
             }
+            return playerRankingModelList;
+        }
+
+
+
+        private async Task<List<PlayerRankingModel>> CreatePlayerViewModel(string position)
+        {
+            IEnumerable<Player> allPlayers = await _playerRepository.ListAllAsync();
+            List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
+
+            foreach (Player player in allPlayers.Where(p => p.PlayerPos == position))
+            {
+                PlayerRankingModel playerRankingModelToAdd = new PlayerRankingModel();
+                try
+                {
+                    PlayerRanking PR = await _rankingRepository.GetByPlayerIdAsync(player.PlayerId);
+
+                    playerRankingModelToAdd.playerRanking = PR;
+                }
+                catch
+                {
+                    PlayerRanking PR = new PlayerRanking();
+                    PR.PlayerId = player.PlayerId;
+                    playerRankingModelToAdd.playerRanking = PR;
+                }
+                finally
+                {
+                    playerRankingModelToAdd.playerToRank = player;
+                    playerRankingModelList.Add(playerRankingModelToAdd);
+                }
+            }
+
 
             return playerRankingModelList;
         }
@@ -82,12 +148,12 @@ namespace FantasyFootballManagerWebApp.Controllers
                 List<PlayerRanking> playerRankingList = await _rankingRepository.SwapPlayerRanks(playerRankingToChange, direction, scoring);
                 Player playerToChange = await _playerRepository.GetByIdAsync(playerRankingList[0].PlayerId);
                 Player otherPlayer = await _playerRepository.GetByIdAsync(playerRankingList[1].PlayerId);
-                if(playerToChange.PlayerPos == otherPlayer.PlayerPos)
+                if (playerToChange.PlayerPos == otherPlayer.PlayerPos)
                 {
                     await UpdatePosRanks(playerRankingList, scoring, direction);
                 }
-                       return RedirectToAction(scoring);
-   
+                return RedirectToAction(scoring);
+
             }
             catch
             {
@@ -100,16 +166,16 @@ namespace FantasyFootballManagerWebApp.Controllers
         private async Task UpdatePosRanks(List<PlayerRanking> PlayerRankingList, String scoring, int direction)
         {
 
-                if (scoring == "Standard")
-                {
-                    PlayerRankingList[0].PosRank -= direction;
-                    PlayerRankingList[1].PosRank += direction;
-                }
-                if (scoring == "Ppr" )
-                {
-                    PlayerRankingList[0].PprPosRank -= direction;
-                    PlayerRankingList[1].PprPosRank += direction;
-                }
+            if (scoring == "Standard")
+            {
+                PlayerRankingList[0].PosRank -= direction;
+                PlayerRankingList[1].PosRank += direction;
+            }
+            if (scoring == "Ppr")
+            {
+                PlayerRankingList[0].PprPosRank -= direction;
+                PlayerRankingList[1].PprPosRank += direction;
+            }
             if (scoring == "Dynasty")
             {
                 PlayerRankingList[0].DynastyPosRank -= direction;
@@ -117,9 +183,9 @@ namespace FantasyFootballManagerWebApp.Controllers
             }
 
             await _rankingRepository.UpdateAsync(PlayerRankingList[0]);
-                await _rankingRepository.UpdateAsync(PlayerRankingList[1]);
-            }
+            await _rankingRepository.UpdateAsync(PlayerRankingList[1]);
         }
-
-
     }
+
+
+}
