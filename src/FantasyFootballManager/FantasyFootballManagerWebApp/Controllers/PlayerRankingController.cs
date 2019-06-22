@@ -136,19 +136,30 @@ namespace FantasyFootballManagerWebApp.Controllers
             return playerRankingModelList;
         }
 
-        public async Task<IActionResult> MovePlayers(int id, string scoring, int direction)
+        public async Task<IActionResult> MovePlayers(int id, string scoring, string playerPosition, int direction)
         {
             try
             {
                 PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
-                List<PlayerRanking> playerRankingList = await _rankingRepository.SwapPlayerRanks(playerRankingToChange, direction, scoring);
+                List<PlayerRanking> playerRankingList = await _rankingRepository.SwapPlayerRanks(playerRankingToChange, direction, scoring, playerPosition);
                 Player playerToChange = await _playerRepository.GetByIdAsync(playerRankingList[0].PlayerId);
                 Player otherPlayer = await _playerRepository.GetByIdAsync(playerRankingList[1].PlayerId);
                 if (playerToChange.PlayerPos == otherPlayer.PlayerPos)
                 {
                     await UpdatePosRanks(playerRankingList, scoring, direction);
                 }
-                return RedirectToAction(scoring);
+
+                if (playerPosition == "All Players")
+                {
+                    return RedirectToAction(scoring);
+                }
+                else
+                {
+                    return RedirectToAction(scoring, new
+                    {
+                        playerPosition
+                    });
+                }
 
             }
             catch
