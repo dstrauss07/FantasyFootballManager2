@@ -7,9 +7,9 @@
 <h3>All Players Standard Ranks</h3>
 
 <p>
-    <a asp-action="Index">Standard</a>
+    <a asp-action="Standard">Standard</a>
     <a asp-action="Ppr">Ppr</a>
-    <a asp-action="Sflex">Sflex</a>
+    <a asp-action="Dynasty">Dynasty</a>
 </p>
 <p>
     <a asp-action="All-Standard">All</a>
@@ -32,27 +32,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.playerRanking.PosRank)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.PlayerValue)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.playerRanking.PprRank)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.PprPosRank)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.PprValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.SflexRank)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.SflexValue)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.PlayerRiskLevel)
-            </th>
             <th></th>
             <th></th>
         </tr>
@@ -72,28 +51,7 @@
                     @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
                     @Html.DisplayFor(modelItem => item.playerRanking.PosRank)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PlayerValue)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PprRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
-                    @Html.DisplayFor(modelItem => item.playerRanking.PprPosRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PprValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.SflexRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.SflexValue)
-                </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.PlayerRiskLevel)
-                </td>
+
 
                 @if (itemNum == 0 && itemNum == lastItem)
                 {

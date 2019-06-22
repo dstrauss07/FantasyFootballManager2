@@ -38,10 +38,10 @@ namespace FantasyFootballManagerWebApp.Controllers
             return View(playerRankingModelList.OrderBy(p => p.playerRanking.PprRank));
         }
 
-        public async Task<IActionResult> Sflex()
+        public async Task<IActionResult> Dynasty()
         {
             List<PlayerRankingModel> playerRankingModelList = await CreatePlayerViewModel();
-            return View(playerRankingModelList.OrderBy(p => p.playerRanking.SflexRank));
+            return View(playerRankingModelList.OrderBy(p => p.playerRanking.DynastyRank));
         }
 
 
@@ -105,68 +105,21 @@ namespace FantasyFootballManagerWebApp.Controllers
                     PlayerRankingList[0].PosRank -= direction;
                     PlayerRankingList[1].PosRank += direction;
                 }
-                if (scoring == "Ppr" || scoring == "Sflex")
+                if (scoring == "Ppr" )
                 {
                     PlayerRankingList[0].PprPosRank -= direction;
                     PlayerRankingList[1].PprPosRank += direction;
                 }
+            if (scoring == "Dynasty")
+            {
+                PlayerRankingList[0].DynastyPosRank -= direction;
+                PlayerRankingList[1].DynastyPosRank += direction;
+            }
 
-                await _rankingRepository.UpdateAsync(PlayerRankingList[0]);
+            await _rankingRepository.UpdateAsync(PlayerRankingList[0]);
                 await _rankingRepository.UpdateAsync(PlayerRankingList[1]);
             }
         }
-
-        //public async Task<IActionResult> MoveDown(int id, string scoring)
-        //{
-        //    int direction = -1;
-        //    try
-        //    {
-        //        PlayerRanking playerRankingToChange = await _rankingRepository.GetByIdAsync(id);
-        //        IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
-        //        int maxPlayerRank = allPlayerRanks.Max(x => x.PlayerRank);
-        //        int maxPprRank = allPlayerRanks.Max(x => x.PprRank);
-        //        int maxSflexRank = allPlayerRanks.Max(x => x.SflexRank);
-
-
-        //        if (playerRankingToChange.PlayerRank < maxPlayerRank && scoring == "standard")
-        //        {
-        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //        if (playerRankingToChange.PprRank < maxPprRank && scoring == "ppr")
-        //        {
-        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-        //            return RedirectToAction(nameof(Ppr));
-        //        }
-        //        if (playerRankingToChange.SflexRank < maxSflexRank && scoring == "sflex")
-        //        {
-        //            await ChangePlayerRanks(direction, playerRankingToChange, scoring);
-        //            return RedirectToAction(nameof(Sflex));
-        //        }
-
-        //    }
-        //    catch
-        //    {
-        //        //todo log exception
-        //    }
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-
-
-
-
-        //// GET: PlayerRanking/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
-
-        //// GET: PlayerRanking/Create
-        //public ActionResult Create()
-        //{
-        //    return View(new PlayerRanking());
-        //}
 
 
     }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StraussDa.FantasyFootballLibrary;
 
 namespace StraussDa.FantasyFootballLibrary.Migrations
 {
     [DbContext(typeof(PlayerDbContext))]
-    partial class PlayerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190622025316_addingDynasty")]
+    partial class addingDynasty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,7 +137,7 @@ namespace StraussDa.FantasyFootballLibrary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DynastyPosRank");
+                    b.Property<decimal>("DynastyPosRank");
 
                     b.Property<int>("DynastyRank");
 

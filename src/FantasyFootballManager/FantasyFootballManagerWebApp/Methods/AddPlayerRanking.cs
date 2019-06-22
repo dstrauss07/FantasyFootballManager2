@@ -27,10 +27,10 @@ namespace FantasyFootballManagerWebApp.Methods
             {
                 var highestRankedPlayer = allPlayerRanks.Max(x => x.PlayerRank);
                 var highestPprPlayer = allPlayerRanks.Max(x => x.PprRank);
-                var highestSflexPlayer = allPlayerRanks.Max(x => x.SflexRank);
+                var highestDynastyPlayer = allPlayerRanks.Max(x => x.DynastyRank);
                 playerRankingToAdd.PlayerRank = highestRankedPlayer + 1;
                 playerRankingToAdd.PprRank = highestPprPlayer + 1;
-                playerRankingToAdd.SflexRank = highestSflexPlayer + 1;
+                playerRankingToAdd.DynastyRank = highestDynastyPlayer + 1;
                 CalculatePlayerRanking(returnedPlayer, allPlayerRanks, allPlayers, playerRankingToAdd);
             }
             else
@@ -39,7 +39,8 @@ namespace FantasyFootballManagerWebApp.Methods
                 playerRankingToAdd.PosRank = 1;
                 playerRankingToAdd.PprRank = 1;
                 playerRankingToAdd.PprPosRank = 1;
-                playerRankingToAdd.SflexRank = 1;
+                playerRankingToAdd.DynastyRank = 1;
+                playerRankingToAdd.DynastyPosRank = 1;
             }
 
             playerRankingToAdd.TestUserProfileId = 2;
@@ -63,13 +64,16 @@ namespace FantasyFootballManagerWebApp.Methods
             {
                 var highestPosRank = allPosRanks.Max(x => x.PosRank);
                 var highestPprPosRank = allPosRanks.Max(x => x.PprPosRank);
+                var highestDynastyPosRank = allPosRanks.Max(x => x.DynastyPosRank);
                 playerRankingToAdd.PosRank = highestPosRank + 1;
                 playerRankingToAdd.PprPosRank = highestPprPosRank + 1;
+                playerRankingToAdd.DynastyPosRank = highestDynastyPosRank + 1;
             }
             else
             {
                 playerRankingToAdd.PosRank = 1;
                 playerRankingToAdd.PprPosRank = 1;
+                playerRankingToAdd.DynastyPosRank = 1;
             }
 
         }

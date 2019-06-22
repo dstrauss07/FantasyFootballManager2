@@ -4,12 +4,12 @@
     int itemNum = 0;
     int lastItem = Model.Count() - 1;
 }
-<h3>All Players Sflex Ranks</h3>
+<h3>All Players Dynasty Ranks</h3>
 
 <p>
-    <a asp-action="Index">Standard</a>
+    <a asp-action="Standard">Standard</a>
     <a asp-action="Ppr">Ppr</a>
-    <a asp-action="Sflex">Sflex</a>
+    <a asp-action="Dynasty">Dynasty</a>
 </p>
 <p>
     <a asp-action="All-Standard">All</a>
@@ -27,14 +27,12 @@
                 @Html.DisplayNameFor(model => model.playerToRank.PlayerName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.playerRanking.SflexRank)
+                @Html.DisplayNameFor(model => model.playerRanking.DynastyRank)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.playerRanking.PprPosRank)
+                @Html.DisplayNameFor(model => model.playerRanking.DynastyPosRank)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.playerRanking.SflexValue)
-            </th>
+  
             <th></th>
             <th></th>
         </tr>
@@ -48,16 +46,14 @@
                 @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.playerRanking.SflexRank)
+                @Html.DisplayFor(modelItem => item.playerRanking.DynastyRank)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
-                @Html.DisplayFor(modelItem => item.playerRanking.PprPosRank)
+                @Html.DisplayFor(modelItem => item.playerRanking.DynastyPosRank)
             </td>
 
-                        <td>
-                @Html.DisplayFor(modelItem => item.playerRanking.SflexValue)
-            </td>
+
 
             @if (itemNum == 0 && itemNum == lastItem)
             {
@@ -67,16 +63,16 @@
             @if (itemNum == 0 && itemNum < lastItem)
             {
                 <td></td>
-                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Sflex", direction = -1 })</td>
+                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Dynasty", direction = -1 })</td>
             }
             @if (itemNum > 0 && itemNum < lastItem)
             {
-                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Sflex", direction = 1 })</td>
-                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Sflex", direction = -1 })</td>
+                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Dynasty", direction = 1 })</td>
+                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Dynasty", direction = -1 })</td>
             }
             @if (itemNum > 0 && itemNum == lastItem)
             {
-                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Sflex",  direction = 1 })</td>
+                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = "Dynasty",  direction = 1 })</td>
                 <td></td>
             }
 

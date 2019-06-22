@@ -50,11 +50,11 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
-        public virtual async Task<PlayerRanking> GetByPlayerSflexRankAsync(int rank)
+        public virtual async Task<PlayerRanking> GetByPlayerDynastyRankAsync(int rank)
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.SflexRank == rank);
+                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.DynastyRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -90,11 +90,11 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                     playerRanksToReturn.Add(otherPlayerRanking);
                     return playerRanksToReturn;
                 }
-                if (scoring == "Sflex")
+                if (scoring == "Dynasty")
                 {
-                    PlayerRanking otherPlayerRanking = await GetByPlayerSflexRankAsync(playerRanking.SflexRank - i);
-                    otherPlayerRanking.SflexRank += i;
-                    playerRanking.SflexRank -= i;
+                    PlayerRanking otherPlayerRanking = await GetByPlayerDynastyRankAsync(playerRanking.DynastyRank - i);
+                    otherPlayerRanking.DynastyRank += i;
+                    playerRanking.DynastyRank -= i;
                     await UpdateAsync(otherPlayerRanking);
                     await UpdateAsync(playerRanking);
                     playerRanksToReturn.Add(playerRanking);
