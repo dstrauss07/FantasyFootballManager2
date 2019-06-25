@@ -44,47 +44,53 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerRanking.DynastyRank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
-                    @Html.DisplayFor(modelItem => item.playerRanking.DynastyPosRank)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerRanking.DynastyRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerToRank.PlayerPos)
+                @Html.DisplayFor(modelItem => item.playerRanking.DynastyPosRank)
+            </td>
 
 
 
-                @if (itemNum == 0 && itemNum == lastItem)
-                {
-                    <td></td>
-                    <td></td>
-                }
-                @if (itemNum == 0 && itemNum < lastItem)
-                {
-                    <td></td>
-                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = -1 })</td>
-                }
-                @if (itemNum > 0 && itemNum < lastItem)
-                {
-                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = 1 })</td>
-                    <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = -1 })</td>
-                }
-                @if (itemNum > 0 && itemNum == lastItem)
-                {
-                    <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = 1 })</td>
-                    <td></td>
-                }
+            @if (itemNum == 0 && itemNum == lastItem)
+            {
+                <td></td>
+                <td></td>
+            }
+            @if (itemNum == 0 && itemNum < lastItem)
+            {
+                <td></td>
+                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = -1 })</td>
+                <td></td>
+                <td>@Html.ActionLink("Bottom", "MoveToBottom", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition })</td>
+            }
+            @if (itemNum > 0 && itemNum < lastItem)
+            {
+                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = 1 })</td>
+                <td>@Html.ActionLink("Down", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = -1 })</td>
+                <td>@Html.ActionLink("Top", "MoveToTop", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition })</td>
+                <td>@Html.ActionLink("Bottom", "MoveToBottom", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition })</td>
+            }
+            @if (itemNum > 0 && itemNum == lastItem)
+            {
+                <td>@Html.ActionLink("Up", "MovePlayers", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition, direction = 1 })</td>
+                <td></td>
+                <td>@Html.ActionLink("Top", "MoveToTop", new { id = item.playerRanking.PlayerRankingId, scoring = scoringType, playerPosition = playerPosition })</td>
+                <td></td>
+            }
 
-                @{
-                    itemNum++;
-                }
+            @{
+                itemNum++;
+            }
 
 
-            </tr>
+        </tr>
         }
     </tbody>
 </table>
