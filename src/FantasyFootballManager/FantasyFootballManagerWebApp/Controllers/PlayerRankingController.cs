@@ -239,7 +239,7 @@ namespace FantasyFootballManagerWebApp.Controllers
                         int highestPosRank = playersOfPosition.Min(x => x.DynastyPosRank);
                         foreach (PlayerRanking p in allPlayerRanks)
                         {
-                            if (p.PprRank < playerToMove.DynastyRank)
+                            if (p.DynastyRank < playerToMove.DynastyRank)
                             {
                                 p.DynastyRank += 1;
                                 if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
@@ -418,7 +418,7 @@ namespace FantasyFootballManagerWebApp.Controllers
                         int lowestPosRank = playersOfPosition.Max(x => x.DynastyPosRank);
                         foreach (PlayerRanking p in allPlayerRanks)
                         {
-                            if (p.PprRank > playerToMove.DynastyRank)
+                            if (p.DynastyRank > playerToMove.DynastyRank)
                             {
                                 p.DynastyRank -= 1;
                                 if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
