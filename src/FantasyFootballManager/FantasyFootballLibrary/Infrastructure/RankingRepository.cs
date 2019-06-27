@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Threading.Tasks;
 using StraussDa.FantasyFootballLibrary.Interfaces;
+using System.Linq;
 
 namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
@@ -18,7 +19,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerId == id);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PlayerId == id);
                 return PlayerRankToReturn;
             }
             catch
@@ -26,11 +27,12 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
+
         public virtual async Task<PlayerRanking> GetByPlayerRankAsync(int rank)
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PlayerRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PlayerRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -42,7 +44,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PprRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PprRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -54,7 +56,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.DynastyRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.DynastyRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -67,7 +69,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PosRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PosRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -80,7 +82,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.PprPosRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PprPosRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -93,7 +95,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await _dbContext.PlayerRanking.FirstAsync(x => x.DynastyPosRank == rank);
+                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.DynastyPosRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -103,10 +105,27 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         }
 
 
+        public List<PlayerRanking> CreateListOfPlayersOfPosition(PlayerRanking playerToMove, IEnumerable<PlayerRanking> allPlayerRanks, IEnumerable<Player> allPlayers)
+        {
+            List<PlayerRanking> playersOfPosition = new List<PlayerRanking>();
+            Player origPlayer = allPlayers.First(x => x.PlayerId == playerToMove.PlayerId);
+            string posTocheck = origPlayer.PlayerPos;
+            foreach (PlayerRanking p in allPlayerRanks)
+            {
+                Player playerToCheck = allPlayers.First(x => x.PlayerId == p.PlayerId);
+                if (playerToCheck.PlayerPos == posTocheck)
+                {
+                    playersOfPosition.Add(p);
+                }
+            }
+            return playersOfPosition;
+        }
+
+
         public async Task<List<PlayerRanking>> SwapPlayerRanks(PlayerRanking playerRanking, int i, string scoring, string playerPosition)
         {
             List<PlayerRanking> playerRanksToReturn = new List<PlayerRanking>();
-            if(playerPosition == "All Players")
+            if (playerPosition == "All Players")
             {
 
                 try
@@ -153,8 +172,8 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
 
             }
-     
-            if(playerPosition != "All Players")
+
+            if (playerPosition != "All Players")
             {
                 try
                 {
@@ -212,7 +231,271 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             {
                 return null;
             }
-        
+        }
+
+        public async void MoveToTop(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
+        {
+            try
+            {
+                if (playerPosition == "All Players")
+                {
+                    if (scoring == "Standard")
+                    {
+                        int highestRank = allPlayerRanks.Min(x => x.PlayerRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.PosRank);
+                        foreach (PlayerRanking p in allPlayerRanks.Where(p => p.PlayerRank < playerToMove.PlayerRank).OrderBy(p => p.PlayerRank))
+                        {
+                            p.PlayerRank += 1;
+                            if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                            {
+                                p.PosRank += 1;
+                            }
+                            await UpdateAsync(p);
+                        }
+                        playerToMove.PlayerRank = highestRank;
+                        playerToMove.PosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                    if (scoring == "Ppr")
+                    {
+                        int highestRank = allPlayerRanks.Min(x => x.PprRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.PprPosRank);
+                        foreach (PlayerRanking p in allPlayerRanks)
+                        {
+                            if (p.PprRank < playerToMove.PprRank)
+                            {
+                                p.PprRank += 1;
+                                if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                                {
+                                    p.PprPosRank += 1;
+                                }
+                                await UpdateAsync(p);
+                            }
+                        }
+                        playerToMove.PprRank = highestRank;
+                        playerToMove.PprPosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                    if (scoring == "Dynasty")
+                    {
+                        int highestRank = allPlayerRanks.Min(x => x.DynastyRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.DynastyPosRank);
+                        foreach (PlayerRanking p in allPlayerRanks)
+                        {
+                            if (p.DynastyRank < playerToMove.DynastyRank)
+                            {
+                                p.DynastyRank += 1;
+                                if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                                {
+                                    p.DynastyPosRank += 1;
+                                }
+                                await UpdateAsync(p);
+                            }
+                        }
+                        playerToMove.DynastyRank = highestRank;
+                        playerToMove.DynastyPosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                }
+                if (playerPosition != "All Players")
+                {
+                    if (scoring == "Standard")
+                    {
+                        int origPosRank = playerToMove.PosRank;
+                        int origPlayerRank = playerToMove.PlayerRank;
+                        int highestRank = playersOfPosition.Min(x => x.PlayerRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.PosRank);
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.PosRank < origPosRank).OrderByDescending(p => p.PosRank))
+                        {
+                            int otherPlayerRank = p.PlayerRank;
+                            int otherPosRank = p.PosRank;
+                            p.PlayerRank = origPlayerRank;
+                            p.PosRank = origPosRank;
+                            origPlayerRank = otherPlayerRank;
+                            origPosRank = otherPosRank;
+                            await UpdateAsync(p);
+                        }
+                        playerToMove.PlayerRank = highestRank;
+                        playerToMove.PosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                    if (scoring == "Ppr")
+                    {
+                        int origPosRank = playerToMove.PprPosRank;
+                        int origPlayerRank = playerToMove.PprRank;
+                        int highestRank = playersOfPosition.Min(x => x.PprRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.PprPosRank);
+
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.PprPosRank < origPosRank).OrderByDescending(p => p.PprPosRank))
+                        {
+                            int otherPlayerRank = p.PprRank;
+                            int otherPosRank = p.PprPosRank;
+                            p.PprRank = origPlayerRank;
+                            p.PprPosRank = origPosRank;
+                            origPlayerRank = otherPlayerRank;
+                            origPosRank = otherPosRank;
+                            await UpdateAsync(p);
+                        }
+                        playerToMove.PprRank = highestRank;
+                        playerToMove.PprPosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                    if (scoring == "Dynasty")
+                    {
+                        int origPosRank = playerToMove.DynastyPosRank;
+                        int origPlayerRank = playerToMove.DynastyRank;
+                        int highestRank = playersOfPosition.Min(x => x.DynastyRank);
+                        int highestPosRank = playersOfPosition.Min(x => x.DynastyPosRank);
+
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.DynastyPosRank < origPosRank).OrderByDescending(p => p.DynastyPosRank))
+                        {
+                            int otherPlayerRank = p.DynastyRank;
+                            int otherPosRank = p.DynastyPosRank;
+                            p.DynastyRank = origPlayerRank;
+                            p.DynastyPosRank = origPosRank;
+                            origPlayerRank = otherPlayerRank;
+                            origPosRank = otherPosRank;
+                            await UpdateAsync(p);
+                        }
+
+                        playerToMove.DynastyRank = highestRank;
+                        playerToMove.DynastyPosRank = highestPosRank;
+                        await UpdateAsync(playerToMove);
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("failure in move to bottom");
+            }
+        }
+
+        public async void MoveToBottom(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
+        {
+            try
+            {
+                if (playerPosition == "All Players")
+                {
+                    if (scoring == "Standard")
+                    {
+                        int lowestRank = allPlayerRanks.Max(x => x.PlayerRank);
+                        int lowestPosRank = playersOfPosition.Max(x => x.PosRank);
+                        foreach (PlayerRanking p in allPlayerRanks.Where(p => p.PlayerRank > playerToMove.PlayerRank).OrderBy(p => p.PlayerRank))
+                        {
+                            p.PlayerRank -= 1;
+                            if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                            {
+                                p.PosRank -= 1;
+                            }
+                            await UpdateAsync(p);
+                        }
+                        playerToMove.PlayerRank = lowestRank;
+                        playerToMove.PosRank = lowestPosRank;
+                    }
+                    if (scoring == "Ppr")
+                    {
+                        int lowestRank = allPlayerRanks.Max(x => x.PprRank);
+                        int lowestPosRank = playersOfPosition.Max(x => x.PprPosRank);
+                        foreach (PlayerRanking p in allPlayerRanks)
+                        {
+                            if (p.PprRank > playerToMove.PprRank)
+                            {
+                                p.PprRank -= 1;
+                                if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                                {
+                                    p.PprPosRank -= 1;
+                                }
+                                await UpdateAsync(p);
+                            }
+                        }
+                        playerToMove.PprRank = lowestRank;
+                        playerToMove.PprPosRank = lowestPosRank;
+                    }
+
+                    if (scoring == "Dynasty")
+                    {
+                        int lowestRank = allPlayerRanks.Max(x => x.DynastyRank);
+                        int lowestPosRank = playersOfPosition.Max(x => x.DynastyPosRank);
+                        foreach (PlayerRanking p in allPlayerRanks)
+                        {
+                            if (p.DynastyRank > playerToMove.DynastyRank)
+                            {
+                                p.DynastyRank -= 1;
+                                if (playersOfPosition.Any(ranking => ranking.PlayerRankingId == p.PlayerRankingId))
+                                {
+                                    p.DynastyPosRank -= 1;
+                                }
+                                await UpdateAsync(p);
+                            }
+                        }
+                        playerToMove.DynastyRank = lowestRank;
+                        playerToMove.DynastyPosRank = lowestPosRank;
+                    }
+                }
+                if (playerPosition != "All Players")
+                {
+                    if (scoring == "Standard")
+                    {
+                        int playersPosRank = playerToMove.PosRank;
+                        int origPlayerRank = playerToMove.PlayerRank;
+                        int posMovements = 0;
+
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.PosRank > playersPosRank).OrderBy(p => p.PosRank))
+                        {
+                            int otherPlayerRank = p.PlayerRank;
+                            p.PlayerRank = origPlayerRank;
+                            p.PosRank -= 1;
+                            origPlayerRank = otherPlayerRank;
+                            await UpdateAsync(p);
+                            posMovements++;
+                        }
+                        playerToMove.PlayerRank = origPlayerRank;
+                        playerToMove.PosRank += posMovements;
+                    }
+                    if (scoring == "Ppr")
+                    {
+                        int playersPosRank = playerToMove.PprPosRank;
+                        int origPlayerRank = playerToMove.PprRank;
+                        int posMovements = 0;
+
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.PprPosRank > playersPosRank).OrderBy(p => p.PprPosRank))
+                        {
+                            int otherPlayerRank = p.PprRank;
+                            p.PprRank = origPlayerRank;
+                            p.PprPosRank -= 1;
+                            origPlayerRank = otherPlayerRank;
+                            await UpdateAsync(p);
+                            posMovements++;
+                        }
+                        playerToMove.PprRank = origPlayerRank;
+                        playerToMove.PprPosRank += posMovements;
+                    }
+
+                    if (scoring == "Dynasty")
+                    {
+                        int playersPosRank = playerToMove.DynastyPosRank;
+                        int origPlayerRank = playerToMove.DynastyRank;
+                        int posMovements = 0;
+
+                        foreach (PlayerRanking p in playersOfPosition.Where(p => p.DynastyPosRank > playersPosRank).OrderBy(p => p.DynastyPosRank))
+                        {
+                            int otherPlayerRank = p.DynastyRank;
+                            p.DynastyRank = origPlayerRank;
+                            p.DynastyPosRank -= 1;
+                            origPlayerRank = otherPlayerRank;
+                            await UpdateAsync(p);
+                            posMovements++;
+                        }
+
+                        playerToMove.DynastyRank = origPlayerRank;
+                        playerToMove.DynastyPosRank += posMovements;
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("failure in move to bottom");
+            }
         }
     }
 }

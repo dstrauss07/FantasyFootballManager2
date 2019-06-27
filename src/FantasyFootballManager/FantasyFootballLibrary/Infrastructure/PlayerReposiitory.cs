@@ -17,7 +17,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public virtual async Task<Player> GetByPlayerByName(string playerName)
         {
-            var playerToReturn = await _dbContext.Player.FirstAsync(x => x.PlayerName == playerName);
+            var playerToReturn = await RankingRepository.Player.FirstAsync(x => x.PlayerName == playerName);
             return playerToReturn;
         }
     }

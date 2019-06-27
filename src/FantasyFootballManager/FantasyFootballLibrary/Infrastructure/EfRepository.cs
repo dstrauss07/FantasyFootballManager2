@@ -10,18 +10,18 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        protected readonly PlayerDbContext _dbContext;
+        protected readonly PlayerDbContext RankingRepository;
 
         public EfRepository(PlayerDbContext playerDbContext)
         {
-            _dbContext = playerDbContext;
+            RankingRepository = playerDbContext;
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
             try
             {
-                return await _dbContext.Set<T>().FindAsync(id);
+                return await RankingRepository.Set<T>().FindAsync(id);
             }
             catch
             {
@@ -31,15 +31,15 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await RankingRepository.Set<T>().ToListAsync();
         }
 
         public async Task<T> AddAsync(T entity)
         {
             try
             {
-                 _dbContext.Set<T>().Add(entity);
-                await _dbContext.SaveChangesAsync();
+                 RankingRepository.Set<T>().Add(entity);
+                await RankingRepository.SaveChangesAsync();
 
                 return entity;
             }
@@ -52,14 +52,14 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public async Task UpdateAsync(T entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            RankingRepository.Entry(entity).State = EntityState.Modified;
+            await RankingRepository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            RankingRepository.Set<T>().Remove(entity);
+            await RankingRepository.SaveChangesAsync();
         }
 
 

@@ -9,5 +9,8 @@ namespace StraussDa.FantasyFootballLibrary.Interfaces
     {
         Task <PlayerRanking> GetByPlayerIdAsync(int id);
         Task<List<PlayerRanking>> SwapPlayerRanks(PlayerRanking playerRanking, int i, string scoring, string playerPosition);
+        List<PlayerRanking> CreateListOfPlayersOfPosition(PlayerRanking playerToMove, IEnumerable<PlayerRanking> allPlayerRanks, IEnumerable<Player> allPlayers);
+        void MoveToTop(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove);
+        void MoveToBottom(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove);
     }
 }

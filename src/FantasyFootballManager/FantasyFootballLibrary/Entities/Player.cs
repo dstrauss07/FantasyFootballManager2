@@ -10,5 +10,10 @@ namespace StraussDa.FantasyFootballLibrary
         public string PlayerName { get; set; }
         public string PlayerPos { get; set; }
         public string PlayerTeam { get; set; }
+
+        public static implicit operator Player(PlayerRanking v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
