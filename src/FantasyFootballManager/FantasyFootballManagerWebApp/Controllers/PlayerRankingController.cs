@@ -10,9 +10,11 @@ using FantasyFootballManagerWebApp.Models;
 using FantasyFootballManagerWebApp.Methods;
 using System.Reflection;
 
+
+
 namespace FantasyFootballManagerWebApp.Controllers
 {
-
+    //MVC CONTROLLER
     public class PlayerRankingController : Controller
     {
         private readonly IPlayerRepository _playerRepository;
