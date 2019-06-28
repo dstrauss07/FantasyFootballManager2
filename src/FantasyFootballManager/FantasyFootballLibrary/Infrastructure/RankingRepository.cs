@@ -15,6 +15,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
 
         }
+
         public virtual async Task<PlayerRanking> GetByPlayerIdAsync(int id)
         {
             try
@@ -40,6 +41,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
+
         public virtual async Task<PlayerRanking> GetByPlayerPprRankAsync(int rank)
         {
             try
@@ -52,6 +54,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
+
         public virtual async Task<PlayerRanking> GetByPlayerDynastyRankAsync(int rank)
         {
             try
@@ -103,8 +106,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
-
-
+        
         public List<PlayerRanking> CreateListOfPlayersOfPosition(PlayerRanking playerToMove, IEnumerable<PlayerRanking> allPlayerRanks, IEnumerable<Player> allPlayers)
         {
             List<PlayerRanking> playersOfPosition = new List<PlayerRanking>();
@@ -120,7 +122,6 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             }
             return playersOfPosition;
         }
-
 
         public async Task<List<PlayerRanking>> SwapPlayerRanks(PlayerRanking playerRanking, int i, string scoring, string playerPosition)
         {
@@ -231,6 +232,29 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             {
                 return null;
             }
+        }
+
+        public async Task UpdatePosRanks(PlayerRanking playerOne, PlayerRanking playerTwo, string scoring, int direction)
+        {
+
+            if (scoring == "Standard")
+            {
+                playerOne.PosRank -= direction;
+                playerTwo.PosRank += direction;
+            }
+            if (scoring == "Ppr")
+            {
+                playerOne.PprPosRank -= direction;
+                playerTwo.PprPosRank += direction;
+            }
+            if (scoring == "Dynasty")
+            {
+                playerOne.DynastyPosRank -= direction;
+                playerTwo.DynastyPosRank += direction;
+            }
+
+            await UpdateAsync(playerOne);
+            await UpdateAsync(playerTwo);
         }
 
         public async Task MoveToTop(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)

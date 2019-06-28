@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StraussDa.FantasyFootballLibrary;
 
+
 namespace FantasyFootballManagerWebApp.Models
 {
     public class PlayerRankingModel
@@ -12,4 +13,6 @@ namespace FantasyFootballManagerWebApp.Models
         public PlayerRanking playerRanking { get; set; }      
 
     }
+
+
 }
