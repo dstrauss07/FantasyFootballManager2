@@ -233,7 +233,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             }
         }
 
-        public async void MoveToTop(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
+        public async Task MoveToTop(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
         {
             try
             {
@@ -243,6 +243,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                     {
                         int highestRank = allPlayerRanks.Min(x => x.PlayerRank);
                         int highestPosRank = playersOfPosition.Min(x => x.PosRank);
+
                         foreach (PlayerRanking p in allPlayerRanks.Where(p => p.PlayerRank < playerToMove.PlayerRank).OrderBy(p => p.PlayerRank))
                         {
                             p.PlayerRank += 1;
@@ -255,6 +256,8 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         playerToMove.PlayerRank = highestRank;
                         playerToMove.PosRank = highestPosRank;
                         await UpdateAsync(playerToMove);
+
+
                     }
                     if (scoring == "Ppr")
                     {
@@ -370,7 +373,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             }
         }
 
-        public async void MoveToBottom(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
+        public async Task MoveToBottom(string playerPosition, string scoring, IEnumerable<PlayerRanking> allPlayerRanks, List<PlayerRanking> playersOfPosition, PlayerRanking playerToMove)
         {
             try
             {
@@ -391,6 +394,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         }
                         playerToMove.PlayerRank = lowestRank;
                         playerToMove.PosRank = lowestPosRank;
+                        await UpdateAsync(playerToMove);
                     }
                     if (scoring == "Ppr")
                     {
@@ -410,6 +414,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         }
                         playerToMove.PprRank = lowestRank;
                         playerToMove.PprPosRank = lowestPosRank;
+                        await UpdateAsync(playerToMove);
                     }
 
                     if (scoring == "Dynasty")
@@ -430,6 +435,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         }
                         playerToMove.DynastyRank = lowestRank;
                         playerToMove.DynastyPosRank = lowestPosRank;
+                        await UpdateAsync(playerToMove);
                     }
                 }
                 if (playerPosition != "All Players")
@@ -451,6 +457,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         }
                         playerToMove.PlayerRank = origPlayerRank;
                         playerToMove.PosRank += posMovements;
+                        await UpdateAsync(playerToMove);
                     }
                     if (scoring == "Ppr")
                     {
@@ -469,6 +476,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                         }
                         playerToMove.PprRank = origPlayerRank;
                         playerToMove.PprPosRank += posMovements;
+                        await UpdateAsync(playerToMove);
                     }
 
                     if (scoring == "Dynasty")
@@ -489,6 +497,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
                         playerToMove.DynastyRank = origPlayerRank;
                         playerToMove.DynastyPosRank += posMovements;
+                        await UpdateAsync(playerToMove);
                     }
                 }
             }

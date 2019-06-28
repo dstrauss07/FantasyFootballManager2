@@ -89,8 +89,10 @@ namespace FantasyFootballManagerWebApp.Controllers
                 }
                 catch
                 {
-                    PlayerRanking PR = new PlayerRanking();
-                    PR.PlayerId = player.PlayerId;
+                    PlayerRanking PR = new PlayerRanking
+                    {
+                        PlayerId = player.PlayerId
+                    };
                     playerRankingModelToAdd.playerRanking = PR;
                 }
                 finally
@@ -120,8 +122,10 @@ namespace FantasyFootballManagerWebApp.Controllers
                 }
                 catch
                 {
-                    PlayerRanking PR = new PlayerRanking();
-                    PR.PlayerId = player.PlayerId;
+                    PlayerRanking PR = new PlayerRanking
+                    {
+                        PlayerId = player.PlayerId
+                    };
                     playerRankingModelToAdd.playerRanking = PR;
                 }
                 finally
@@ -172,7 +176,7 @@ namespace FantasyFootballManagerWebApp.Controllers
             IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
             IEnumerable<Player> allPlayers = await _playerRepository.ListAllAsync();
             List<PlayerRanking> playersOfPosition = _rankingRepository.CreateListOfPlayersOfPosition(playerToMove, allPlayerRanks, allPlayers);
-            _rankingRepository.MoveToTop(playerPosition, scoring, allPlayerRanks, playersOfPosition, playerToMove);
+            await _rankingRepository.MoveToTop(playerPosition, scoring, allPlayerRanks, playersOfPosition, playerToMove);
             if (playerPosition == "All Players")
             {
                 return RedirectToAction(scoring);
@@ -196,7 +200,7 @@ namespace FantasyFootballManagerWebApp.Controllers
                 IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
                 IEnumerable<Player> allPlayers = await _playerRepository.ListAllAsync();
                 List<PlayerRanking> playersOfPosition = _rankingRepository.CreateListOfPlayersOfPosition(playerToMove, allPlayerRanks, allPlayers);
-            _rankingRepository.MoveToBottom(scoring, playerPosition, allPlayerRanks, playersOfPosition, playerToMove);
+              await  _rankingRepository.MoveToBottom(playerPosition, scoring, allPlayerRanks, playersOfPosition, playerToMove);
             if (playerPosition == "All Players")
             {
                 return RedirectToAction(scoring);
