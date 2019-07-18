@@ -26,6 +26,8 @@ namespace FantasyFootballManagerWebApp
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,6 +52,18 @@ namespace FantasyFootballManagerWebApp
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IRankingRepository, RankingRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://example.com",
+                                        "http://www.contoso.com",
+                                        "http://localhost/")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -73,6 +87,7 @@ namespace FantasyFootballManagerWebApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseMvc(routes =>
             {
