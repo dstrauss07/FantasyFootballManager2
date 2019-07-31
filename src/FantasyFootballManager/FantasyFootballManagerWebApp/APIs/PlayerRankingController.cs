@@ -9,6 +9,8 @@ using StraussDa.FantasyFootballLibrary.Interfaces;
 using StraussDa.FantasyFootballLibrary;
 using FantasyFootballManagerWebApp.Models;
 using FantasyFootballManagerWebApp.Methods;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace FantasyFootballManagerWebApp.APIs
 {
@@ -40,10 +42,19 @@ namespace FantasyFootballManagerWebApp.APIs
         }
 
         // GET: api/PlayerRankingApi/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{requestedProfileId}", Name = "Get")]
+        public async Task<IActionResult> GetPlayerRankings(int requestedProfileId)
         {
-            return "value";
+            try
+            {
+                List<PlayerRankingModel> playerRankingModelList = await _createPlayerViewModels.CreatePlayerViewModel(_rankingRepository, _playerRepository, requestedProfileId);
+                return Ok(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
         // POST: api/PlayerRankingApi
@@ -57,6 +68,21 @@ namespace FantasyFootballManagerWebApp.APIs
         public void Put(int id, [FromBody] string value)
         {
         }
+
+        [HttpPatch()]
+
+        public async Task<IActionResult> patchPlayerRankings([FromBody] List<PlayerRankingModel> playerRankingsToUpdate)
+        {
+            for (int i = 0; i < playerRankingsToUpdate.Count; i++)
+            {
+                await _rankingRepository.UpdateAsync(playerRankingsToUpdate[i].playerRanking);
+            }
+
+            //PlayerRanking playerRankingToUpdate = JsonConvert.DeserializeObject<PlayerRanking>(playerRankingToUpdateString);
+   
+            return null;
+      
+         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]

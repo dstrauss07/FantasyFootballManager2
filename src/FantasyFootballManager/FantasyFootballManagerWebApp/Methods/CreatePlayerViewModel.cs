@@ -41,6 +41,76 @@ namespace FantasyFootballManagerWebApp.Methods
             return playerRankingModelList;
         }
 
+        public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(IRankingRepository rankingRepository, IPlayerRepository playerRepository, int profileID)
+        {
+            IEnumerable<Player> allPlayers = await playerRepository.ListAllAsync();
+            List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
+
+            foreach (Player player in allPlayers)
+            {
+                PlayerRankingModel playerRankingModelToAdd = new PlayerRankingModel();
+                try
+                {
+                    PlayerRanking PR = await rankingRepository.GetByPlayerIdAsync(player.PlayerId);
+                    if (PR.TestUserProfileId == profileID)
+                    {
+                        playerRankingModelToAdd.playerRanking = PR;
+                        playerRankingModelToAdd.playerToRank = player;
+                        playerRankingModelList.Add(playerRankingModelToAdd);
+                    }
+
+                }
+                catch
+                {
+                    PlayerRanking PR = new PlayerRanking
+                    {
+                        PlayerId = player.PlayerId
+                    };
+                    playerRankingModelToAdd.playerRanking = PR;
+                    playerRankingModelToAdd.playerToRank = player;
+                    playerRankingModelList.Add(playerRankingModelToAdd);
+                }
+            }
+           
+            if(playerRankingModelList.Count > 0)
+            {
+                return playerRankingModelList;
+            }
+
+            
+            else
+            {
+                profileID = 2;
+                foreach (Player player in allPlayers)
+                {
+                    PlayerRankingModel playerRankingModelToAdd = new PlayerRankingModel();
+                    try
+                    {
+                        PlayerRanking PR = await rankingRepository.GetByPlayerIdAsync(player.PlayerId);
+                        if (PR.TestUserProfileId == profileID)
+                        {
+                            playerRankingModelToAdd.playerRanking = PR;
+                        }
+
+                    }
+                    catch
+                    {
+                        PlayerRanking PR = new PlayerRanking
+                        {
+                            PlayerId = player.PlayerId
+                        };
+                        playerRankingModelToAdd.playerRanking = PR;
+                    }
+                    finally
+                    {
+                        playerRankingModelToAdd.playerToRank = player;
+                        playerRankingModelList.Add(playerRankingModelToAdd);
+                    }
+                }
+                return playerRankingModelList;
+            }
+        }
+
 
         public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(string position, IRankingRepository rankingRepository, IPlayerRepository playerRepository)
         {
