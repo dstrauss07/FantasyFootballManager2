@@ -15,7 +15,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserEmail)
             </th>
-            <th> @Html.DisplayNameFor(model => model.DraftedTeams)
+             <th>
+                @Html.DisplayNameFor(model => model.UserPassword)
             </th>
         </tr>
     </thead>
@@ -32,7 +33,7 @@
                 @Html.DisplayFor(modelItem => item.UserEmail)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DraftedTeams.Count)
+                @Html.DisplayFor(modelItem => item.UserPassword)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.TestUserProfileId }) |
