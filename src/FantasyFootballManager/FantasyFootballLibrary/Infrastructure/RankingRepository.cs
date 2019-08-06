@@ -20,7 +20,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PlayerId == id);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.PlayerId == id);
                 return PlayerRankToReturn;
             }
             catch
@@ -33,7 +33,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PlayerRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.PlayerRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -46,7 +46,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PprRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.PprRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -59,7 +59,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.DynastyRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.DynastyRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -72,7 +72,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PosRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.PosRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -85,7 +85,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.PprPosRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.PprPosRank == rank);
                 return PlayerRankToReturn;
             }
             catch
@@ -98,7 +98,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
         {
             try
             {
-                var PlayerRankToReturn = await RankingRepository.PlayerRanking.FirstAsync(x => x.DynastyPosRank == rank);
+                var PlayerRankToReturn = await selectedRepository.PlayerRanking.FirstAsync(x => x.DynastyPosRank == rank);
                 return PlayerRankToReturn;
             }
             catch

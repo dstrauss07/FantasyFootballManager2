@@ -10,18 +10,18 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        protected readonly PlayerDbContext RankingRepository;
+        protected readonly PlayerDbContext selectedRepository;
 
         public EfRepository(PlayerDbContext playerDbContext)
         {
-            RankingRepository = playerDbContext;
+            selectedRepository = playerDbContext;
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
             try
             {
-                return await RankingRepository.Set<T>().FindAsync(id);
+                return await selectedRepository.Set<T>().FindAsync(id);
             }
             catch
             {
@@ -31,15 +31,15 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await RankingRepository.Set<T>().ToListAsync();
+            return await selectedRepository.Set<T>().ToListAsync();
         }
 
         public async Task<T> AddAsync(T entity)
         {
             try
             {
-                 RankingRepository.Set<T>().Add(entity);
-                await RankingRepository.SaveChangesAsync();
+                selectedRepository.Set<T>().Add(entity);
+                await selectedRepository.SaveChangesAsync();
 
                 return entity;
             }
@@ -52,14 +52,14 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         public async Task UpdateAsync(T entity)
         {
-            RankingRepository.Entry(entity).State = EntityState.Modified;
-            await RankingRepository.SaveChangesAsync();
+            selectedRepository.Entry(entity).State = EntityState.Modified;
+            await selectedRepository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            RankingRepository.Set<T>().Remove(entity);
-            await RankingRepository.SaveChangesAsync();
+            selectedRepository.Set<T>().Remove(entity);
+            await selectedRepository.SaveChangesAsync();
         }
 
 

@@ -52,6 +52,7 @@ namespace FantasyFootballManagerWebApp
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped<IRankingRepository, RankingRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
