@@ -14,7 +14,7 @@ namespace FantasyFootballManagerWebApp.APIs
     public class ProfileUserController : ControllerBase
     {
 
-          private readonly IProfileRepository _profileRepository;
+        private readonly IProfileRepository _profileRepository;
 
         public ProfileUserController(IProfileRepository profileRepository)
         {
@@ -52,6 +52,38 @@ namespace FantasyFootballManagerWebApp.APIs
                 return null;
             }
         }
+        //        ,{emailToPass
+        //    },{passwordToPass
+        //}
 
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] dynamic data)
+        {
+            try
+            {
+                TestUserProfile profileToReturn = await _profileRepository.GetProfileByEmailAsync(data.email);
+                return Ok(profileToReturn);
+            }
+            catch
+            {
+                try
+                {
+                    TestUserProfile userProfileToAdd = new TestUserProfile();
+                    userProfileToAdd.Name = data.name;
+                    userProfileToAdd.UserEmail = data.email;
+                    userProfileToAdd.UserPassword = data.password;
+                    await _profileRepository.AddAsync(userProfileToAdd);
+                    TestUserProfile profileToReturn = await _profileRepository.GetProfileByEmailAsync(userProfileToAdd.UserEmail);
+                    return Ok(profileToReturn);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+
+            }
+        }
     }
 }

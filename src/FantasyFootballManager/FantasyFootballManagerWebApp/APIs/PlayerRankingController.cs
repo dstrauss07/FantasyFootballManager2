@@ -30,7 +30,7 @@ namespace FantasyFootballManagerWebApp.APIs
         {
             _playerRepository = playerRepository;
             _rankingRepository = rankingRepository;
-            _createPlayerViewModels = new CreatePlayerViewModels();
+            _createPlayerViewModels = new CreatePlayerViewModels(_rankingRepository);
         }
 
         // GET: api/PlayerRankingApi

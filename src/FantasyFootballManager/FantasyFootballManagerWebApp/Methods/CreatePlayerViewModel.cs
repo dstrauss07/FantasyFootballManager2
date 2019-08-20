@@ -10,8 +10,13 @@ namespace FantasyFootballManagerWebApp.Methods
 {
     public class CreatePlayerViewModels
     {
+        private readonly IRankingRepository _rankingRepository;
 
-        public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(IRankingRepository rankingRepository, IPlayerRepository playerRepository)
+        public CreatePlayerViewModels(IRankingRepository rankingRepository)
+        {
+            _rankingRepository = rankingRepository;
+        }
+            public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(IRankingRepository rankingRepository, IPlayerRepository playerRepository)
         {
             IEnumerable<Player> allPlayers = await playerRepository.ListAllAsync();
             List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
@@ -43,6 +48,7 @@ namespace FantasyFootballManagerWebApp.Methods
 
         public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(IRankingRepository rankingRepository, IPlayerRepository playerRepository, int profileID)
         {
+            int defaultProfileID = 2;
             IEnumerable<Player> allPlayers = await playerRepository.ListAllAsync();
             List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
 
@@ -80,16 +86,18 @@ namespace FantasyFootballManagerWebApp.Methods
             
             else
             {
-                profileID = 2;
+              
                 foreach (Player player in allPlayers)
                 {
                     PlayerRankingModel playerRankingModelToAdd = new PlayerRankingModel();
                     try
                     {
                         PlayerRanking PR = await rankingRepository.GetByPlayerIdAsync(player.PlayerId);
-                        if (PR.TestUserProfileId == profileID)
+                        if (PR.TestUserProfileId == defaultProfileID)
                         {
+                            PR.TestUserProfileId = profileID;
                             playerRankingModelToAdd.playerRanking = PR;
+                            await _rankingRepository.AddAsync(PR);
                         }
 
                     }
