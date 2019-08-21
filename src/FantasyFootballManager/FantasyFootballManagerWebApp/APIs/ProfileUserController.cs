@@ -15,10 +15,14 @@ namespace FantasyFootballManagerWebApp.APIs
     {
 
         private readonly IProfileRepository _profileRepository;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IRankingRepository _rankingRepository;
 
-        public ProfileUserController(IProfileRepository profileRepository)
+        public ProfileUserController(IProfileRepository profileRepository, IPlayerRepository playerRepository, IRankingRepository rankingRepository)
         {
             _profileRepository = profileRepository;
+            _playerRepository = playerRepository;
+            _rankingRepository = rankingRepository;
         }
 
 
@@ -75,6 +79,7 @@ namespace FantasyFootballManagerWebApp.APIs
                     userProfileToAdd.UserPassword = data.password;
                     await _profileRepository.AddAsync(userProfileToAdd);
                     TestUserProfile profileToReturn = await _profileRepository.GetProfileByEmailAsync(userProfileToAdd.UserEmail);
+                    await _rankingRepository.CreateListOfPlayerRanksByProfileId(profileToReturn.TestUserProfileId, _playerRepository, _rankingRepository);
                     return Ok(profileToReturn);
                 }
                 catch (Exception ex)

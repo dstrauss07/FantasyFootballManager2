@@ -29,6 +29,31 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             }
         }
 
+        public virtual async Task<PlayerRanking> GetByPlayerIdAndProfileIdAsync(int playerId, int profileId)
+        {
+            try
+            {
+                IEnumerable<PlayerRanking> allPlayerRankings = new List<PlayerRanking>();
+                allPlayerRankings = await ListAllAsync();
+                PlayerRanking PlayerRankToReturn = new PlayerRanking();
+
+                foreach (PlayerRanking playerRank in allPlayerRankings)
+                {
+                    if(playerRank.PlayerId== playerId && playerRank.TestUserProfileId == profileId)
+                    {
+                        PlayerRankToReturn = playerRank;
+                        break;
+                    }
+                }
+
+                return PlayerRankToReturn;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public virtual async Task<PlayerRanking> GetByPlayerRankAsync(int rank)
         {
             try
@@ -106,7 +131,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 return null;
             }
         }
-        
+
         public List<PlayerRanking> CreateListOfPlayersOfPosition(PlayerRanking playerToMove, IEnumerable<PlayerRanking> allPlayerRanks, IEnumerable<Player> allPlayers)
         {
             List<PlayerRanking> playersOfPosition = new List<PlayerRanking>();
@@ -530,5 +555,33 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 Console.WriteLine("failure in move to bottom");
             }
         }
+
+        public async Task<List<PlayerRanking>> CreateListOfPlayerRanksByProfileId(int id, IPlayerRepository _playerRepository, IRankingRepository _rankingRepository)
+        {
+            IEnumerable<Player> allPlayers = new List<Player>();
+            allPlayers = await _playerRepository.ListAllAsync();
+            List<PlayerRanking> rankingsToReturn = new List<PlayerRanking>();
+
+            foreach (Player player in allPlayers)
+            {
+                var playerRankingCreated = await GetByPlayerIdAndProfileIdAsync(player.PlayerId,2);
+                PlayerRanking playerRankingToAdd = new PlayerRanking();
+                playerRankingToAdd.DynastyPosRank = playerRankingCreated.DynastyPosRank;
+                playerRankingToAdd.DynastyRank = playerRankingCreated.DynastyRank;
+                playerRankingToAdd.isDefault = false;
+                playerRankingToAdd.Player = playerRankingCreated.Player;
+                playerRankingToAdd.PlayerId = playerRankingCreated.PlayerId;
+                playerRankingToAdd.PlayerRank = playerRankingCreated.PlayerRank;
+                playerRankingToAdd.PosRank = playerRankingCreated.PosRank;
+                playerRankingToAdd.PprPosRank = playerRankingCreated.PprPosRank;
+                playerRankingToAdd.PprRank = playerRankingCreated.PprRank;
+                playerRankingToAdd.TestUserProfileId = id;
+                rankingsToReturn.Add(playerRankingCreated);
+                await _rankingRepository.AddAsync(playerRankingToAdd);
+            }
+
+            return rankingsToReturn;
+        }
+
     }
 }
