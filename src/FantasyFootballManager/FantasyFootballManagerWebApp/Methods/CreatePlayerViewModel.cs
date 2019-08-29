@@ -50,32 +50,16 @@ namespace FantasyFootballManagerWebApp.Methods
         {
             int defaultProfileID = 2;
             IEnumerable<Player> allPlayers = await playerRepository.ListAllAsync();
+            IEnumerable<PlayerRanking> allRanksofProfile = await rankingRepository.GetAllRanksByProfileId(profileID);
             List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
 
             foreach (Player player in allPlayers)
             {
                 PlayerRankingModel playerRankingModelToAdd = new PlayerRankingModel();
-                try
-                {
-                    PlayerRanking PR = await rankingRepository.GetByPlayerIdAsync(player.PlayerId);
-                    if (PR.TestUserProfileId == profileID)
-                    {
+                PlayerRanking PR = allRanksofProfile.FirstOrDefault(x => x.PlayerId == player.PlayerId);
                         playerRankingModelToAdd.playerRanking = PR;
                         playerRankingModelToAdd.playerToRank = player;
                         playerRankingModelList.Add(playerRankingModelToAdd);
-                    }
-
-                }
-                catch
-                {
-                    PlayerRanking PR = new PlayerRanking
-                    {
-                        PlayerId = player.PlayerId
-                    };
-                    playerRankingModelToAdd.playerRanking = PR;
-                    playerRankingModelToAdd.playerToRank = player;
-                    playerRankingModelList.Add(playerRankingModelToAdd);
-                }
             }
            
             if(playerRankingModelList.Count > 0)

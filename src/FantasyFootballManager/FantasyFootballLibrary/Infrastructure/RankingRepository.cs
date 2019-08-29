@@ -11,6 +11,8 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 {
     public class RankingRepository : EfRepository<PlayerRanking>, IRankingRepository
     {
+        private IReadOnlyList<PlayerRanking> allPlayerRankings;
+
         public RankingRepository(PlayerDbContext playerDbContext) : base(playerDbContext)
         {
 
@@ -52,6 +54,20 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
             {
                 return null;
             }
+        }
+
+        public virtual async Task<List<PlayerRanking>> GetAllRanksByProfileId(int profileId)
+        {
+            List<PlayerRanking> playersOfProfile = new List<PlayerRanking>();
+            allPlayerRankings = await ListAllAsync();
+            foreach(PlayerRanking p in allPlayerRankings)
+            {
+                if(p.TestUserProfileId == profileId)
+                {
+                    playersOfProfile.Add(p);
+                }
+            }
+            return playersOfProfile;
         }
 
         public virtual async Task<PlayerRanking> GetByPlayerRankAsync(int rank)
