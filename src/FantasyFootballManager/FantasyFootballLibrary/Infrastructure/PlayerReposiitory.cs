@@ -15,10 +15,38 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
         }
 
+        public virtual async Task<Player> AddNewPlayerAsync(Player newPlayer)
+        {
+
+            var playerToCheck = await GetByPlayerByName(newPlayer.PlayerName);
+            if(playerToCheck == null)
+            {
+                selectedRepository.Player.Add(newPlayer);
+                await selectedRepository.SaveChangesAsync();
+                return newPlayer;
+            }
+            else
+            {
+                return newPlayer;
+            }
+
+        }
+
         public virtual async Task<Player> GetByPlayerByName(string playerName)
         {
-            var playerToReturn = await selectedRepository.Player.FirstAsync(x => x.PlayerName == playerName);
-            return playerToReturn;
+            try
+            {
+                var playerToReturn = await selectedRepository.Player.FirstAsync(x => x.PlayerName == playerName);
+
+                return playerToReturn;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
+
+        
     }
 }

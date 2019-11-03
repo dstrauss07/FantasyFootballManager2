@@ -8,5 +8,6 @@ namespace StraussDa.FantasyFootballLibrary.Interfaces
     public interface IPlayerRepository : IAsyncRepository<Player>
     {
         Task <Player> GetByPlayerByName(string playerName);
+        Task<Player> AddNewPlayerAsync(Player newPlayer);
     }
 }
