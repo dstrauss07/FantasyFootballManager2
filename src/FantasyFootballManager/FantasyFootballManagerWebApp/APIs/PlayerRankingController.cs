@@ -20,9 +20,8 @@ namespace FantasyFootballManagerWebApp.APIs
     {
 
         public IConfiguration Configuration { get; set; }
-
-
-        private readonly IPlayerRepository _playerRepository;
+        public int defaultProfileId = 2025;
+                       private readonly IPlayerRepository _playerRepository;
         private readonly IRankingRepository _rankingRepository;
         private readonly CreatePlayerViewModels _createPlayerViewModels;
 
@@ -48,14 +47,22 @@ namespace FantasyFootballManagerWebApp.APIs
             try
             {
                 List<PlayerRankingModel> playerRankingModelList = await _createPlayerViewModels.CreatePlayerViewModel(_rankingRepository, _playerRepository, requestedProfileId);
+
+
+
+
+                if (playerRankingModelList.Count == 0||playerRankingModelList == null)
+                {
+                   playerRankingModelList = await _createPlayerViewModels.CreatePlayerViewModel(_rankingRepository, _playerRepository, defaultProfileId);
+                }
                 return Ok(playerRankingModelList.OrderBy(p => p.playerRanking.PlayerRank));
             }
             catch
             {
-                return null;
+                //TODO ADD LOGGING
+                    return null;
             }
-
-        }
+          }
 
         // POST: api/PlayerRankingApi
         [HttpPost]

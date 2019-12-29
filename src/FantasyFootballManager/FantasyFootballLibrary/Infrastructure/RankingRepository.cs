@@ -580,7 +580,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
 
             foreach (Player player in allPlayers)
             {
-                var playerRankingCreated = await GetByPlayerIdAndProfileIdAsync(player.PlayerId,2);
+                var playerRankingCreated = await GetByPlayerIdAndProfileIdAsync(player.PlayerId,2025);
                 PlayerRanking playerRankingToAdd = new PlayerRanking();
                 playerRankingToAdd.DynastyPosRank = playerRankingCreated.DynastyPosRank;
                 playerRankingToAdd.DynastyRank = playerRankingCreated.DynastyRank;
@@ -592,7 +592,7 @@ namespace StraussDa.FantasyFootballLibrary.Infrastructure
                 playerRankingToAdd.PprPosRank = playerRankingCreated.PprPosRank;
                 playerRankingToAdd.PprRank = playerRankingCreated.PprRank;
                 playerRankingToAdd.TestUserProfileId = id;
-                rankingsToReturn.Add(playerRankingCreated);
+                //rankingsToReturn.Add(playerRankingCreated);
                 await _rankingRepository.AddAsync(playerRankingToAdd);
             }
 

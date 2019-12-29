@@ -43,7 +43,7 @@ namespace FantasyFootballManagerWebApp.Methods
                 playerRankingToAdd.DynastyPosRank = 1;
             }
 
-            playerRankingToAdd.TestUserProfileId = 2;
+            playerRankingToAdd.TestUserProfileId = 2025;
             playerRankingToAdd.isDefault = true;
             await rankingRepository.AddAsync(playerRankingToAdd);
         }

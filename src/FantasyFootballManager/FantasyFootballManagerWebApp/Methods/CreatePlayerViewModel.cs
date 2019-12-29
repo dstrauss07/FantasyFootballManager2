@@ -48,7 +48,7 @@ namespace FantasyFootballManagerWebApp.Methods
 
         public async Task<List<PlayerRankingModel>> CreatePlayerViewModel(IRankingRepository rankingRepository, IPlayerRepository playerRepository, int profileID)
         {
-            int defaultProfileID = 2;
+            int defaultProfileID = 2025;
             IEnumerable<Player> allPlayers = await playerRepository.ListAllAsync();
             IEnumerable<PlayerRanking> allRanksofProfile = await rankingRepository.GetAllRanksByProfileId(profileID);
             List<PlayerRankingModel> playerRankingModelList = new List<PlayerRankingModel>();
@@ -59,6 +59,7 @@ namespace FantasyFootballManagerWebApp.Methods
                 PlayerRanking PR = allRanksofProfile.FirstOrDefault(x => x.PlayerId == player.PlayerId);
                         playerRankingModelToAdd.playerRanking = PR;
                         playerRankingModelToAdd.playerToRank = player;
+                playerRankingModelToAdd.playerRanking.TestUserProfileId = profileID;
                         playerRankingModelList.Add(playerRankingModelToAdd);
             }
            
