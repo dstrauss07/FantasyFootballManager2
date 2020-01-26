@@ -8,8 +8,8 @@ using StraussDa.FantasyFootballLibrary.Interfaces;
 using StraussDa.FantasyFootballLibrary;
 using MoreLinq;
 using FantasyFootballManagerWebApp.Methods;
-
-
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace FantasyFootballManagerWebApp.Controllers
 {
@@ -73,33 +73,40 @@ namespace FantasyFootballManagerWebApp.Controllers
             return View(newPlayer);
         }
 
-        //private async Task AddPlayerRanking(Player newPlayer)
-        //{
-        //    var returnedPlayer = await _playerRepository.GetByPlayerByName(newPlayer.PlayerName);
-        //    if (await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId) != null)
-        //    {
-        //        PlayerRanking playerRankingToDelete = await _rankingRepository.GetByPlayerIdAsync(returnedPlayer.PlayerId);
-        //        await _rankingRepository.DeleteAsync(playerRankingToDelete);
-        //        Console.Write("Previous Ranking Deleted");
-        //    }
+        public IActionResult Upload()
+        {
+            return View();
+        }
 
-        //    PlayerRanking playerRankingToAdd = new PlayerRanking();
-        //    playerRankingToAdd.PlayerId = returnedPlayer.PlayerId;
-        //    IEnumerable<PlayerRanking> allPlayerRanks = await _rankingRepository.ListAllAsync();
-        //    if (allPlayerRanks.Count() > 0)
-        //    {
-        //        var highestRankedPlayer = allPlayerRanks.Max(x => x.PlayerRank);
-        //        playerRankingToAdd.PlayerRank = highestRankedPlayer + 1;
-        //    }
-        //    else
-        //    {
-        //        playerRankingToAdd.PlayerRank = 1;
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile upload)
+        {
+            using (var reader = new StreamReader(upload.OpenReadStream()))
+            {
+                string currentLine;
+                while ((currentLine = reader.ReadLine()) != null)
+                {
+                    Console.WriteLine(currentLine);
+                    string[] columns = currentLine.Split(',');
+                    Console.WriteLine(columns);
+                    Player playerToAdd = new Player();
+                    playerToAdd.PlayerName = columns[0];
+                    playerToAdd.PlayerTeam = columns[1];
+                    string playerPos = Regex.Replace(columns[2], @"[\d-]", string.Empty);
+                    playerToAdd.PlayerPos = playerPos;
+                    Console.WriteLine(playerToAdd);
+                    await _playerRepository.AddNewPlayerAsync(playerToAdd);
+                    var returnedPlayer = await _playerRepository.GetByPlayerByName(playerToAdd.PlayerName);
+                    await AddPlayerRankingMethod.AddPlayerRanking(returnedPlayer, _rankingRepository, _playerRepository);
+                }
+            }
 
-        //    playerRankingToAdd.TestUserProfileId = 2;
-        //    playerRankingToAdd.isDefault = true;
-        //    await _rankingRepository.AddAsync(playerRankingToAdd);
-        //}
+            return RedirectToAction(nameof(Index));
+
+        }
+
+
 
         // GET: Player/Edit/5
         public async Task<IActionResult> Edit(int id)
